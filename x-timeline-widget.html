@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>X Timeline Widget</title>
+  <style>
+    :root {
+      --text: #2C2C2B;
+      --text-secondary: #7D7A75;
+      --canvas: #FFFFFF;
+      --surface: #F9F8F7;
+      --surface-2: #F0EFED;
+      --border: #E6E5E3;
+      --accent: #2783DE;
+      --accent-soft: #E5F2FC;
+      --radius: 8px;
+      --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 12px rgba(0,0,0,.04);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #FFFFFF;
+        --text-secondary: rgba(255, 255, 255, 0.65);
+        --canvas: #191919;
+        --surface: #202020;
+        --surface-2: #383836;
+        --border: rgba(255, 255, 255, 0.20);
+        --accent: #5E9FE8;
+        --accent-soft: rgba(94, 159, 232, 0.12);
+        --shadow: none;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--canvas);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 24px 16px 32px;
+    }
+
+    .widget {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .logo {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      color: var(--text);
+    }
+
+    .header-text h1 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .themes {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--canvas);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chip:hover,
+    .chip[aria-pressed="true"] {
+      background: var(--accent-soft);
+      border-color: transparent;
+      color: var(--accent);
+    }
+
+    .chip:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .timeline-shell {
+      min-height: 560px;
+      background: var(--canvas);
+      position: relative;
+    }
+
+    #timeline {
+      min-height: 560px;
+      padding: 0 4px;
+    }
+
+    .state {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+      background: var(--canvas);
+    }
+
+    .state.is-visible { display: flex; }
+
+    .state strong {
+      display: block;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .state-body {
+      display: block;
+      max-width: 280px;
+    }
+
+    .twitter-timeline {
+      color: transparent !important;
+      font-size: 0 !important;
+      line-height: 0 !important;
+    }
+
+    @media (max-width: 420px) {
+      .page { padding: 16px 12px 24px; }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .themes { width: 100%; }
+      .chip { flex: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="widget" aria-label="Xタイムラインウィジェット">
+      <header class="header">
+        <div class="brand">
+          <svg class="logo" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.828L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+          </svg>
+          <div class="header-text">
+            <h1>X Timeline</h1>
+          </div>
+        </div>
+        <div class="themes" role="group" aria-label="表示テーマ">
+          <button type="button" class="chip" data-theme="light" aria-pressed="false">ライト</button>
+          <button type="button" class="chip" data-theme="dark" aria-pressed="false">ダーク</button>
+          <button type="button" class="chip" data-theme="auto" aria-pressed="true">自動</button>
+        </div>
+      </header>
+
+      <div class="timeline-shell">
+        <div id="state" class="state" aria-live="polite"></div>
+        <div id="timeline"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      // ===== 設定（ここだけ変更） =====
+      const CONFIG = {
+        // 表示したいXのユーザー名（@なし）
+        username: "juufuuteiraden",
+        // タイムラインの高さ（px）
+        height: 560,
+        // 初期テーマ: "light" | "dark" | "auto"
+        theme: "auto"
+      };
+      // ==============================
+
+      const timeline = document.getElementById("timeline");
+      const state = document.getElementById("state");
+      const chips = Array.from(document.querySelectorAll(".chip[data-theme]"));
+
+      let theme = CONFIG.theme || "auto";
+
+      function normalizeUsername(raw) {
+        if (!raw) return "";
+        let value = String(raw).trim();
+        value = value.replace(/^@+/, "");
+        value = value.replace(/^https?:\/\/(www\.)?(twitter|x)\.com\//i, "");
+        value = value.split(/[/?#]/)[0];
+        value = value.replace(/[^A-Za-z0-9_]/g, "");
+        return value;
+      }
+
+      function resolveChrome() {
+        if (theme === "dark") return "dark";
+        if (theme === "light") return "light";
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      }
+
+      function setState(title, body) {
+        if (!title) {
+          state.classList.remove("is-visible");
+          state.innerHTML = "";
+          return;
+        }
+        const bodyHtml = body
+          ? '<span class="state-body">' + body + "</span>"
+          : "";
+        state.innerHTML = "<strong>" + title + "</strong>" + bodyHtml;
+        state.classList.add("is-visible");
+      }
+
+      function loadWidgetsScript() {
+        return new Promise(function (resolve, reject) {
+          if (window.twttr && window.twttr.widgets) {
+            resolve();
+            return;
+          }
+          const existing = document.querySelector('script[src*="platform.twitter.com/widgets.js"]');
+          if (existing) {
+            existing.addEventListener("load", resolve);
+            existing.addEventListener("error", reject);
+            return;
+          }
+          const script = document.createElement("script");
+          script.src = "https://platform.twitter.com/widgets.js";
+          script.async = true;
+          script.charset = "utf-8";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      function renderTimeline(username) {
+        timeline.innerHTML = "";
+        setState("読み込み中…", "タイムラインを取得しています");
+
+        const link = document.createElement("a");
+        link.className = "twitter-timeline";
+        link.href = "https://twitter.com/" + encodeURIComponent(username);
+        link.setAttribute("data-height", String(CONFIG.height || 560));
+        link.setAttribute("data-chrome", "noheader nofooter noborders transparent");
+        link.setAttribute("data-theme", resolveChrome());
+        link.textContent = "Tweets by @" + username;
+        timeline.appendChild(link);
+
+        loadWidgetsScript()
+          .then(function () {
+            return window.twttr.widgets.load(timeline);
+          })
+          .then(function () {
+            const iframe = timeline.querySelector("iframe");
+            if (iframe) {
+              setState(null);
+            } else {
+              setState(
+                "表示できませんでした",
+                "アカウント設定かネットワーク接続を確認してください"
+              );
+            }
+          })
+          .catch(function () {
+            setState(
+              "読み込みに失敗しました",
+              "インターネット接続と、X埋め込みのブロック設定を確認してください"
+            );
+          });
+      }
+
+      function applyThemeChips() {
+        chips.forEach(function (c) {
+          c.setAttribute(
+            "aria-pressed",
+            String(c.getAttribute("data-theme") === theme)
+          );
+        });
+      }
+
+      chips.forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          theme = chip.getAttribute("data-theme");
+          applyThemeChips();
+          try {
+            localStorage.setItem("x-timeline-theme", theme);
+          } catch (_) {}
+          const username = normalizeUsername(CONFIG.username);
+          if (username) renderTimeline(username);
+        });
+      });
+
+      try {
+        const savedTheme = localStorage.getItem("x-timeline-theme");
+        if (savedTheme && ["light", "dark", "auto"].includes(savedTheme)) {
+          theme = savedTheme;
+        }
+      } catch (_) {}
+
+      applyThemeChips();
+
+      const username = normalizeUsername(CONFIG.username);
+      if (!username) {
+        setState("設定エラー", "CONFIG.username にユーザー名を入れてください");
+        return;
+      }
+      renderTimeline(username);
+    })();
+  </script>
+</body>
+</html>
