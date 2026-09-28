@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>X Timeline 簡易版 カード v2</title>
+  <title>X Timeline Cards</title>
   <style>
     :root {
       --text: #2C2C2B;
@@ -40,299 +40,126 @@
       background: var(--canvas);
       -webkit-font-smoothing: antialiased;
     }
-    .page {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
-    }
+    .page { max-width: 640px; margin: 0 auto; padding: 24px 16px 40px; }
     .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 16px;
     }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .logo { width: 22px; height: 22px; color: var(--text); flex-shrink: 0; }
-    .brand h1 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .brand p {
-      margin: 2px 0 0;
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
+    .brand h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+    .brand p { margin: 2px 0 0; font-size: 12px; color: var(--text-secondary); }
     .actions { display: flex; gap: 8px; flex-shrink: 0; }
     .btn {
-      appearance: none;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-secondary);
-      border-radius: 8px;
-      min-height: 36px;
-      padding: 0 12px;
-      font: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow);
+      appearance: none; border: 1px solid var(--border); background: var(--surface);
+      color: var(--text-secondary); border-radius: 8px; min-height: 36px; padding: 0 12px;
+      font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; box-shadow: var(--shadow);
     }
     .btn:hover { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
-    .btn-primary {
-      background: var(--accent);
-      border-color: transparent;
-      color: #fff;
-    }
+    .btn-primary { background: var(--accent); border-color: transparent; color: #fff; }
     .btn-primary:hover { opacity: .92; color: #fff; background: var(--accent); }
-​
-    /* Profile card */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
     }
     .profile-card { margin-bottom: 16px; }
     .profile-banner {
       height: 88px;
-      background:
-        linear-gradient(135deg, rgba(39,131,222,.18), rgba(39,131,222,.02)),
-        var(--surface-2);
-      background-size: cover;
-      background-position: center;
+      background: linear-gradient(135deg, rgba(39,131,222,.18), rgba(39,131,222,.02)), var(--surface-2);
+      background-size: cover; background-position: center;
     }
     .profile-body {
-      display: grid;
-      grid-template-columns: 72px 1fr;
-      gap: 12px;
-      padding: 0 16px 16px;
-      margin-top: -28px;
+      display: grid; grid-template-columns: 72px 1fr; gap: 12px;
+      padding: 0 16px 16px; margin-top: -28px;
     }
     .avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: var(--surface-2);
-      border: 3px solid var(--surface);
-      box-shadow: var(--shadow);
+      width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+      background: var(--surface-2); border: 3px solid var(--surface); box-shadow: var(--shadow);
     }
     .profile-main { padding-top: 34px; min-width: 0; }
-    .profile-name {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .profile-handle {
-      margin: 2px 0 0;
-      color: var(--text-secondary);
-      font-size: 13px;
-    }
+    .profile-name { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+    .profile-handle { margin: 2px 0 0; color: var(--text-secondary); font-size: 13px; }
     .profile-bio {
-      grid-column: 1 / -1;
-      margin: 4px 0 0;
-      font-size: 14px;
-      color: var(--text);
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
+      grid-column: 1 / -1; margin: 4px 0 0; font-size: 14px; color: var(--text);
+      white-space: pre-wrap; overflow-wrap: anywhere;
     }
-    .profile-meta {
-      grid-column: 1 / -1;
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .profile-meta { grid-column: 1 / -1; margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
     .chip {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 0 10px;
-      border-radius: 999px;
-      background: var(--surface-2);
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 600;
-      text-decoration: none;
-      border: 1px solid transparent;
+      display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px;
+      border-radius: 999px; background: var(--surface-2); color: var(--text-secondary);
+      font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid transparent;
     }
     a.chip:hover { background: var(--accent-soft); color: var(--accent); }
-​
     .section-label {
-      margin: 0 0 10px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      letter-spacing: 0.02em;
+      margin: 0 0 10px; font-size: 13px; font-weight: 700;
+      color: var(--text-secondary); letter-spacing: 0.02em;
     }
-​
-    /* Post cards grid/list */
-    .feed {
-      display: grid;
-      gap: 12px;
-    }
+    .feed { display: grid; gap: 12px; }
     .post-card {
-      display: block;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
-      color: var(--text);
+      display: block; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px;
+      color: var(--text); cursor: pointer;
       transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
     }
     .post-card:hover {
-      border-color: rgba(39,131,222,.35);
-      transform: translateY(-1px);
+      border-color: rgba(39,131,222,.35); transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(0,0,0,.06), 0 8px 20px rgba(0,0,0,.04);
     }
-    .post-card:focus-within {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
+    .post-card:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
     @media (prefers-color-scheme: dark) {
-      .post-card:hover {
-        border-color: rgba(94,159,232,.45);
-        box-shadow: none;
-      }
+      .post-card:hover { border-color: rgba(94,159,232,.45); box-shadow: none; }
     }
-    .post-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+    .post-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .post-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      flex-shrink: 0;
+      width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+      background: var(--surface-2); border: 1px solid var(--border); flex-shrink: 0;
     }
     .post-who { min-width: 0; flex: 1; }
     .post-who-name {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin: 0; font-size: 14px; font-weight: 700;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .post-who-sub {
-      margin: 1px 0 0;
-      font-size: 12px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin: 1px 0 0; font-size: 12px; color: var(--text-secondary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .post-time {
-      font-size: 12px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+    .post-time { font-size: 12px; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
     .post-text {
-      margin: 0;
-      font-size: 15px;
-      color: var(--text);
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
+      margin: 0; font-size: 15px; color: var(--text);
+      white-space: pre-wrap; overflow-wrap: anywhere;
     }
     .post-text a { color: var(--accent); text-decoration: none; }
     .post-text a:hover { text-decoration: underline; }
-    .media {
-      margin-top: 12px;
-      display: grid;
-      gap: 8px;
-    }
+    .media { margin-top: 12px; display: grid; gap: 8px; }
     .media.single img {
-      width: 100%;
-      max-height: 320px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface-2);
+      width: 100%; max-height: 320px; object-fit: cover; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface-2);
     }
-    .media.multi {
-      grid-template-columns: 1fr 1fr;
-    }
+    .media.multi { grid-template-columns: 1fr 1fr; }
     .media.multi img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface-2);
+      width: 100%; height: 140px; object-fit: cover; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface-2);
     }
     .post-foot {
-      margin-top: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      margin-top: 12px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px;
     }
-    .post-stats {
-      display: flex;
-      gap: 12px;
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .post-cta {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--accent);
-      text-decoration: none;
-    }
+    .post-stats { display: flex; gap: 12px; color: var(--text-secondary); font-size: 12px; font-weight: 600; }
+    .post-cta { font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: none; }
     .post-cta:hover { text-decoration: underline; }
-    .post-card { cursor: pointer; }
     .empty {
-      padding: 32px 16px;
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 14px;
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
+      padding: 32px 16px; text-align: center; color: var(--text-secondary); font-size: 14px;
+      background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
     }
     .note {
-      margin-top: 16px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.6;
+      margin-top: 16px; text-align: center; font-size: 12px;
+      color: var(--text-secondary); line-height: 1.6;
     }
     .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%);
-      background: var(--text);
-      color: var(--canvas);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 13px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease;
-      z-index: 20;
+      position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+      background: var(--text); color: var(--canvas); padding: 10px 14px; border-radius: 999px;
+      font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 20;
     }
     .toast.show { opacity: 1; }
     @media (max-width: 420px) {
@@ -367,225 +194,269 @@
         <a class="btn btn-primary" id="open-x" href="https://x.com/juufuuteiraden" target="_blank" rel="noopener noreferrer">Xで開く</a>
       </div>
     </div>
-​
+
     <section class="card profile-card" aria-label="プロフィール">
       <div class="profile-banner" id="profile-banner"></div>
       <div class="profile-body" id="profile"></div>
     </section>
-​
+
     <p class="section-label">最近の投稿</p>
     <section class="feed" id="feed" aria-label="投稿カード一覧" aria-live="polite"></section>
-​
+
     <p class="note">
       簡易カード表示 · 公式埋め込み不使用<br />
       投稿本文はスナップショットです。最新は「Xで開く」から確認できます。
     </p>
   </main>
   <div class="toast" id="toast" role="status"></div>
-​
+
+  <!-- 埋め込みバックアップ（data.json が読めない時用） -->
+  <script>
+    window.__TIMELINE_SEED_B64__ = "eyJ1c2VybmFtZSI6Imp1dWZ1dXRlaXJhZGVuIiwiZmV0Y2hlZF9hdCI6IjIwMjYtMDktMjhUMDc6MTQ6NDhaIiwicHJvZmlsZSI6eyJuYW1lIjoi5YSS54OP6aKo5Lqt44KJ44Gn44KT8J+QmlJlR0xPU1MiLCJzY3JlZW5fbmFtZSI6Imp1dWZ1dXRlaXJhZGVuIiwiZGVzY3JpcHRpb24iOiLlr4TjgaPjgabjgonjgaPjgZfjgoPjgYTopovjgabjgonjgaPjgZfjgoPjgYQgaG9sb2xpdmUgREVWX0lT44GL44KJ44OH44OT44Ol44O844GX44GfUmVHTE9TU+OBruWEkueDj+miqOS6reOCieOBp+OCk+OBqOeUs+OBl+OBvuOBme+8gVxu576O6KGT44KE576O6KGT6aSo44CB6JC96Kqe44GM5aW944GN44Gn44GZ44CC5q2M44Gj44Gf44KK6LiK44Gj44Gf44KK44KC44GX44G+44GZ44CCXG7jg5vjg63jg6njgqTjg5bjg5fjg63jg4Djgq/jgrfjg6fjg7MgfCDjg57jg546IEBrYW9taW5nNzc1IHwg44OR44OROiBAa2VmZml5IHwg44OV44Kh44Oz44Ki44O844OIICPjgonjgafjgpPkvLzntbUgfCIsImF2YXRhcl91cmwiOiJodHRwczovL3Bicy50d2ltZy5jb20vcHJvZmlsZV9pbWFnZXMvMjA5ODcyODQzMzgyODQ2MjU5Mi91OGwybkdBaV9iaWdnZXIucG5nIiwiYmFubmVyX3VybCI6Imh0dHBzOi8vcGJzLnR3aW1nLmNvbS9wcm9maWxlX2Jhbm5lcnMvMTY3NzIxODY1ODE1Mjc1OTI5Ni8xNzg5MjEwODI2IiwidXJsIjoiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbiIsImZvbGxvd2VycyI6NTE0ODQ1LCJ0d2VldHMiOjEwMjk1LCJ3ZWJzaXRlIjoiaHR0cHM6Ly93d3cueW91dHViZS5jb20vQEp1dWZ1dXRlaVJhZGVuIn0sInBvc3RzIjpbeyJpZCI6IjIwOTgyNjE3MDQxNjE1NjcxNzIiLCJ0ZXh0Ijoi8J+QmuOCpOODmeODs+ODiO+8huOCsOODg+OCuuaDheWgseS4gOimp/CfkJpcblxuMjAyNuW5tOWkj+OBi+OCiTIwMjflubQx5pyI44Gr44GL44GR44Gm44Gu44Kk44OZ44Oz44OI77yG44Kw44OD44K65LiA6Kan44Gv44GT44Gh44KJ44Gn44O844KT77yB77yBXG5cbuOBk+OBoeOCieOBjOacgOaWsOeJiOOBp+OBmfCfkYDinKhcblxu56We5Ye66ay85rKh44Gu44KJ44Gn44KT44Gn44GZ44GM44Gp44GG44Ge44KI44KN44GX44GP44GK6aGY44GE44GE44Gf44GX44G+44GZ77yB77yB77yBIGh0dHBzOi8vdC5jby9lbVhqQzJsWjlPIiwiY3JlYXRlZF9hdCI6IkZyaSBTZXAgMTEgMDQ6MDU6NDggKzAwMDAgMjAyNiIsImNyZWF0ZWRfaXNvIjoiMjAyNi0wOS0xMVQwNDowNTo0OCswMDowMCIsImNyZWF0ZWRfbGFiZWwiOiIyMDI2LzA5LzExIDEzOjA1IiwidXJsIjoiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMjA5ODI2MTcwNDE2MTU2NzE3MiIsIm1lZGlhIjpbeyJ0eXBlIjoicGhvdG8iLCJ1cmwiOiJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvSFI2RjVnSWFZQUU0UU5ULmpwZyIsImV4cGFuZGVkX3VybCI6Imh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzIwOTgyNjE3MDQxNjE1NjcxNzIvcGhvdG8vMSJ9XSwiZmF2b3JpdGVfY291bnQiOjM5OTQsInJldHdlZXRfY291bnQiOjY2OH0seyJpZCI6IjE5NzQwMDkwMjY4NTkyMjU0NTEiLCJ0ZXh0Ijoi44CQY292ZXLjgJHjgZXjgojjg7zjgarjgonjgb7jgZ/jgYTjgaTjgYvvvIHjgJBSZUdMT1NT44KI44KK44CRIGh0dHBzOi8vdC5jby95bzJIOVBveFdCIEBZb3VUdWJl44KI44KKIFxuXG5SZUdMT1NT44KI44KK6Z2S44GP44KT44G4XG5SZUdMT1NT44KI44KK44G/44KT44Gq44G4XG5SZUdMT1NT44KI44KK56eB44Gf44Gh44G4IGh0dHBzOi8vdC5jby9BdDNRcHA1Y1R5IiwiY3JlYXRlZF9hdCI6IkZyaSBPY3QgMDMgMDc6MTA6MDEgKzAwMDAgMjAyNSIsImNyZWF0ZWRfaXNvIjoiMjAyNS0xMC0wM1QwNzoxMDowMSswMDowMCIsImNyZWF0ZWRfbGFiZWwiOiIyMDI1LzEwLzAzIDE2OjEwIiwidXJsIjoiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTk3NDAwOTAyNjg1OTIyNTQ1MSIsIm1lZGlhIjpbeyJ0eXBlIjoicGhvdG8iLCJ1cmwiOiJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvRzJVV2hVbmFJQUFHVzBhLmpwZyIsImV4cGFuZGVkX3VybCI6Imh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE5NzQwMDkwMjY4NTkyMjU0NTEvcGhvdG8vMSJ9XSwiZmF2b3JpdGVfY291bnQiOjEzMDE1MSwicmV0d2VldF9jb3VudCI6MjU5MjJ9LHsiaWQiOiIxOTc0MDA4Mjk0MzcwMTQ0NTE2IiwidGV4dCI6IumdkuOBj+OCk+OBuFxuUmVHTE9TU+OBqOOBl+OBpuS4gOe3kuOBq+a0u+WLleOBp+OBjeOBpuOAgeOBqOOBo+OBpuOCgualveOBl+OBi+OBo+OBn+OCiOOAglxuXG7kuIDnt5LjgavjgYrlh7rjgYvjgZHjgZfjgZ/jgorjgIHjgYrms4rjgorjgZfjgZ/jgorjgIHjg6zjg4Pjgrnjg7PjgZfjgZ/jgorjgIHpnZLjgY/jgpPjgajpgY7jgZTjgZfjgZ/kuIDml6XkuIDml6XjgYzlpKfkuovjgarmgJ3jgYTlh7rjgafjgZnjgIJcblxuUmVHTE9TU+OBrjXkurrjga7lpKfliIfjgarmpIXlrZDjgYzjgbLjgajjgaTjgb3jgaPjgYvjgornqbrjgYTjgabjgZfjgb7jgaPjgabjgIHlr4LjgZfjgY/jgarjgYTjgajoqIDjgaPjgZ/jgonlmJjjgavjgarjgorjgb7jgZnjgIIiLCJjcmVhdGVkX2F0IjoiRnJpIE9jdCAwMyAwNzowNzowNyArMDAwMCAyMDI1IiwiY3JlYXRlZF9pc28iOiIyMDI1LTEwLTAzVDA3OjA3OjA3KzAwOjAwIiwiY3JlYXRlZF9sYWJlbCI6IjIwMjUvMTAvMDMgMTY6MDciLCJ1cmwiOiJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xOTc0MDA4Mjk0MzcwMTQ0NTE2IiwibWVkaWEiOltdLCJmYXZvcml0ZV9jb3VudCI6MTE1OTU2LCJyZXR3ZWV0X2NvdW50IjoxMzk4Nn0seyJpZCI6IjE4Mjg3Njk0NDA0NjY3MDIzMzkiLCJ0ZXh0IjoiI+a5iuOBguOBj+OBguWNkualreODqeOCpOODllxuXG7jgYTjgaPjgabjgonjgaPjgZfjgoPjgYTvvIFcbuOBvuOBn+OBqeOBk+OBi+OBp++8ge+8gSIsImNyZWF0ZWRfYXQiOiJXZWQgQXVnIDI4IDEyOjE5OjQ2ICswMDAwIDIwMjQiLCJjcmVhdGVkX2lzbyI6IjIwMjQtMDgtMjhUMTI6MTk6NDYrMDA6MDAiLCJjcmVhdGVkX2xhYmVsIjoiMjAyNC8wOC8yOCAyMToxOSIsInVybCI6Imh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE4Mjg3Njk0NDA0NjY3MDIzMzkiLCJtZWRpYSI6W10sImZhdm9yaXRlX2NvdW50Ijo2MTAzNCwicmV0d2VldF9jb3VudCI6NzU1OH0seyJpZCI6IjE4MjA4MDM1NDgwODQ1OTY5MzQiLCJ0ZXh0Ijoi44Gd44GX44Gm44CB44G/44Gq44GV44KT44GM5oCd44Gj44Gm44KL44KI44KK44KC56eB44Gf44Gh44Gv5LuW5Lq644Gu5oSf5oOF44Gr5bem5Y+z44GV44KM44KL44GX44CB55ay44KM44Gm44GX44G+44GE44G+44GZ44CCXG7jgZfjgpPjganjgYTjgarjgaPjgabmgJ3jgaPjgZ/jgonjgZ3jga7jgajjgY3jga/lsJHjgZfjgaDjgZHjgqTjg7Pjgr/jg7zjg43jg4Pjg4jjgYvjgonpm6Ljgozjgabjgb/jgabjgY/jgaDjgZXjgYTjga3jgIIiLCJjcmVhdGVkX2F0IjoiVHVlIEF1ZyAwNiAxMjo0NjowOSArMDAwMCAyMDI0IiwiY3JlYXRlZF9pc28iOiIyMDI0LTA4LTA2VDEyOjQ2OjA5KzAwOjAwIiwiY3JlYXRlZF9sYWJlbCI6IjIwMjQvMDgvMDYgMjE6NDYiLCJ1cmwiOiJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xODIwODAzNTQ4MDg0NTk2OTM0IiwibWVkaWEiOltdLCJmYXZvcml0ZV9jb3VudCI6NTY0NDMsInJldHdlZXRfY291bnQiOjgyNjN9LHsiaWQiOiIxOTc0MDI0MjkwNDY4MjM3NzA3IiwidGV4dCI6IuODl+ODrOODn+OCouWFrOmWi+OBguOCiuOBjOOBqOOBhuOBlOOBluOBhOOBvuOBl+OBn+OAglxuXG7jgZPjga7jgqvjg5Djg7zjga7oo73kvZzmnJ/plpM15pel44Gu44Gq44GL44Gn44CB44Os44Kz44O844OH44Kj44Oz44Kw44Gr5Y2U5Yqb44GX44Gm44GP44KM44Gf5aWP44CB6I6J44CF6I+v44CB44Gv44GY44KB44CB44Ku44Oq44Ku44Oq44G+44Gn6Kq/5pW044GX44Gm44GP44KM44GfTUlY5bir5YWr5Lmd5a+644GX44KT44GY44GV44KT44CB44Kk44Op44K544OI44KS5LuV5LiK44GS44Gm44GP44KM44Gf44Kk44Op44K544OI44Os44O844K/44O844OL44O844OP44Kq5LiJ5bmz44GV44KT44CB44Gd44GX44Gm6IG044GE44Gm44GP44Gg44GV44Gj44Gf44G/44Gq44GV44G+44Gr5pyA5aSn44Gu5oSf6Kyd44KS6L6844KB44Gm44CCIiwiY3JlYXRlZF9hdCI6IkZyaSBPY3QgMDMgMDg6MTA6NDEgKzAwMDAgMjAyNSIsImNyZWF0ZWRfaXNvIjoiMjAyNS0xMC0wM1QwODoxMDo0MSswMDowMCIsImNyZWF0ZWRfbGFiZWwiOiIyMDI1LzEwLzAzIDE3OjEwIiwidXJsIjoiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTk3NDAyNDI5MDQ2ODIzNzcwNyIsIm1lZGlhIjpbXSwiZmF2b3JpdGVfY291bnQiOjU2OTMyLCJyZXR3ZWV0X2NvdW50Ijo4Mzg1fSx7ImlkIjoiMTkzMzUzMTAwMDI2Njc2NDM4NCIsInRleHQiOiLmlLnjgoHjgb7jgZfjgabjgIHmnKzml6U25pyIMTPml6Xkuqzpg73lpKflrabjg6Hjg4fjgqPjgqLmlofljJblrabjgavjgabnibnliKXorJvnvqnjgpLjgZXjgZvjgabjgYTjgZ/jgaDjgY3jgb7jgZfjgZ/jg7zvvIFcblxu44Go44Gm44KC5YWJ5qCE44Gq44GT44Go44Gn44CB57eK5by144GX44Gk44Gk44KC5qW944GX44GP44GK6Kmx44Gn44GN44Gf44Gu44GL44Gq44Go5oCd44GE44G+44GZ44CCVnR1YmVy44Gu44Ki44Kk44OH44Oz44OG44Kj44OG44Kj44KE5LuV5LqL44Gu44GT44Go44Gq44Gp44CB6Ieq5YiG44Gu5L2T6aiT44KS44KC44Go44Gr5ZaL44KJ44Gb44Gm44GE44Gf44Gg44GN44G+44GX44Gf77yBXG5cbuiytOmHjeOBquapn+S8muOCkuOBguOCiuOBjOOBqOOBhuOBlOOBluOBhOOBvuOBl+OBn++8ge+8gSBodHRwczovL3QuY28venpVZXJ3NlJwaiIsImNyZWF0ZWRfYXQiOiJGcmkgSnVuIDEzIDE0OjI0OjQ4ICswMDAwIDIwMjUiLCJjcmVhdGVkX2lzbyI6IjIwMjUtMDYtMTNUMTQ6MjQ6NDgrMDA6MDAiLCJjcmVhdGVkX2xhYmVsIjoiMjAyNS8wNi8xMyAyMzoyNCIsInVybCI6Imh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE5MzM1MzEwMDAyNjY3NjQzODQiLCJtZWRpYSI6W3sidHlwZSI6InBob3RvIiwidXJsIjoiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0d0Vkc2d3RiTUFFdlgwQS5qcGciLCJleHBhbmRlZF91cmwiOiJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xOTMzNTMxMDAwMjY2NzY0Mzg0L3Bob3RvLzEifV0sImZhdm9yaXRlX2NvdW50Ijo1MjU1MCwicmV0d2VldF9jb3VudCI6NTAyNX0seyJpZCI6IjE4OTAwMDgxMjU3OTQ5MDI1MjQiLCJ0ZXh0Ijoi44OP44KhIOODiOOCpOODrOOCgueEoeOCp1xu5pmC6ZaT44KC54Sh44KnXG7jgYrphZLjgoLjgZ3jgozjgbvjgankvZnjgaPjgabnhKHjgqdcbuS8keOBv+OCgueEoeOCpyDkvZnoo5XjgoLnhKHjgqdcbuOBvuOBhOOBn+OBkeavjuaXpeOBkOODvOOCi+OBkOOCiyIsImNyZWF0ZWRfYXQiOiJUaHUgRmViIDEzIDEyOjAwOjI2ICswMDAwIDIwMjUiLCJjcmVhdGVkX2lzbyI6IjIwMjUtMDItMTNUMTI6MDA6MjYrMDA6MDAiLCJjcmVhdGVkX2xhYmVsIjoiMjAyNS8wMi8xMyAyMTowMCIsInVybCI6Imh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE4OTAwMDgxMjU3OTQ5MDI1MjQiLCJtZWRpYSI6W10sImZhdm9yaXRlX2NvdW50Ijo0Njg0OCwicmV0d2VldF9jb3VudCI6NDk3MH0seyJpZCI6IjE4NTQzNjE3MjI0NjQ5NDAzNTciLCJ0ZXh0IjoiaHR0cHM6Ly90LmNvL3JZb0s2OVZIUzciLCJjcmVhdGVkX2F0IjoiVGh1IE5vdiAwNyAwMzoxNDoyMSArMDAwMCAyMDI0IiwiY3JlYXRlZF9pc28iOiIyMDI0LTExLTA3VDAzOjE0OjIxKzAwOjAwIiwiY3JlYXRlZF9sYWJlbCI6IjIwMjQvMTEvMDcgMTI6MTQiLCJ1cmwiOiJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xODU0MzYxNzIyNDY0OTQwMzU3IiwibWVkaWEiOlt7InR5cGUiOiJwaG90byIsInVybCI6Imh0dHBzOi8vcGJzLnR3aW1nLmNvbS9tZWRpYS9HYndFS0lRYUlBQXBEZXMuanBnIiwiZXhwYW5kZWRfdXJsIjoiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTg1NDM2MTcyMjQ2NDk0MDM1Ny9waG90by8xIn1dLCJmYXZvcml0ZV9jb3VudCI6NDUyMzgsInJldHdlZXRfY291bnQiOjU0Nzd9LHsiaWQiOiIxODIwODAxMzU4MjcyMDI4NzM1IiwidGV4dCI6IuOBqeOCk+OBquaEn+aDheOCguOBguOBquOBn+OBruOCguOBruOBquOBruOBp+OAgeWkp+WIh+OBq+OBl+OBpuOBguOBkuOBpuOBj+OBoOOBleOBhOOAgiIsImNyZWF0ZWRfYXQiOiJUdWUgQXVnIDA2IDEyOjM3OjI3ICswMDAwIDIwMjQiLCJjcmVhdGVkX2lzbyI6IjIwMjQtMDgtMDZUMTI6Mzc6MjcrMDA6MDAiLCJjcmVhdGVkX2xhYmVsIjoiMjAyNC8wOC8wNiAyMTozNyIsInVybCI6Imh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE4MjA4MDEzNTgyNzIwMjg3MzUiLCJtZWRpYSI6W10sImZhdm9yaXRlX2NvdW50Ijo0NDE0NiwicmV0d2VldF9jb3VudCI6Njg1M31dfQ==";
+  </script>
   <script>
 (function () {
-  var SEED_B64 = 'eyJ1c2VybmFtZSI6ICJqdXVmdXV0ZWlyYWRlbiIsICJmZXRjaGVkX2F0IjogIjIwMjYtMDktMjhUMDc6MTQ6NDhaIiwgInByb2ZpbGUiOiB7Im5hbWUiOiAi5YSS54OP6aKo5Lqt44KJ44Gn44KT8J+QmlJlR0xPU1MiLCAic2NyZWVuX25hbWUiOiAianV1ZnV1dGVpcmFkZW4iLCAiZGVzY3JpcHRpb24iOiAi5a+E44Gj44Gm44KJ44Gj44GX44KD44GE6KaL44Gm44KJ44Gj44GX44KD44GEIGhvbG9saXZlIERFVl9JU+OBi+OCieODh+ODk+ODpeODvOOBl+OBn1JlR0xPU1Pjga7lhJLng4/poqjkuq3jgonjgafjgpPjgajnlLPjgZfjgb7jgZnvvIFcbue+juihk+OChOe+juihk+mkqOOAgeiQveiqnuOBjOWlveOBjeOBp+OBmeOAguatjOOBo+OBn+OCiui4iuOBo+OBn+OCiuOCguOBl+OBvuOBmeOAglxu44Ob44Ot44Op44Kk44OW44OX44Ot44OA44Kv44K344On44OzIHwg44Oe44OeOiBAa2FvbWluZzc3NSB8IOODkeODkTogQGtlZmZpeSB8IOODleOCoeODs+OCouODvOODiCAj44KJ44Gn44KT5Ly857W1IHwiLCAiYXZhdGFyX3VybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vcHJvZmlsZV9pbWFnZXMvMjA5ODcyODQzMzgyODQ2MjU5Mi91OGwybkdBaV9iaWdnZXIucG5nIiwgImJhbm5lcl91cmwiOiAiaHR0cHM6Ly9wYnMudHdpbWcuY29tL3Byb2ZpbGVfYmFubmVycy8xNjc3MjE4NjU4MTUyNzU5Mjk2LzE3ODkyMTA4MjYiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4iLCAiZm9sbG93ZXJzIjogNTE0ODQ1LCAidHdlZXRzIjogMTAyOTUsICJ3ZWJzaXRlIjogImh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL0BKdXVmdXV0ZWlSYWRlbiJ9LCAicG9zdHMiOiBbeyJpZCI6ICIyMDk4MjYxNzA0MTYxNTY3MTcyIiwgInRleHQiOiAi8J+QmuOCpOODmeODs+ODiO+8huOCsOODg+OCuuaDheWgseS4gOimp/CfkJpcblxuMjAyNuW5tOWkj+OBi+OCiTIwMjflubQx5pyI44Gr44GL44GR44Gm44Gu44Kk44OZ44Oz44OI77yG44Kw44OD44K65LiA6Kan44Gv44GT44Gh44KJ44Gn44O844KT77yB77yBXG5cbuOBk+OBoeOCieOBjOacgOaWsOeJiOOBp+OBmfCfkYDinKhcblxu56We5Ye66ay85rKh44Gu44KJ44Gn44KT44Gn44GZ44GM44Gp44GG44Ge44KI44KN44GX44GP44GK6aGY44GE44GE44Gf44GX44G+44GZ77yB77yB77yBIGh0dHBzOi8vdC5jby9lbVhqQzJsWjlPIiwgImNyZWF0ZWRfYXQiOiAiRnJpIFNlcCAxMSAwNDowNTo0OCArMDAwMCAyMDI2IiwgImNyZWF0ZWRfaXNvIjogIjIwMjYtMDktMTFUMDQ6MDU6NDgrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI2LzA5LzExIDEzOjA1IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8yMDk4MjYxNzA0MTYxNTY3MTcyIiwgIm1lZGlhIjogW3sidHlwZSI6ICJwaG90byIsICJ1cmwiOiAiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0hSNkY1Z0lhWUFFNFFOVC5qcGciLCAiZXhwYW5kZWRfdXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzIwOTgyNjE3MDQxNjE1NjcxNzIvcGhvdG8vMSJ9XSwgImZhdm9yaXRlX2NvdW50IjogMzk5NCwgInJldHdlZXRfY291bnQiOiA2Njh9LCB7ImlkIjogIjE5NzQwMDkwMjY4NTkyMjU0NTEiLCAidGV4dCI6ICLjgJBjb3ZlcuOAkeOBleOCiOODvOOBquOCieOBvuOBn+OBhOOBpOOBi++8geOAkFJlR0xPU1PjgojjgorjgJEgaHR0cHM6Ly90LmNvL3lvMkg5UG94V0IgQFlvdVR1YmXjgojjgoogXG5cblJlR0xPU1PjgojjgorpnZLjgY/jgpPjgbhcblJlR0xPU1Pjgojjgorjgb/jgpPjgarjgbhcblJlR0xPU1Pjgojjgornp4HjgZ/jgaHjgbggaHR0cHM6Ly90LmNvL0F0M1FwcDVjVHkiLCAiY3JlYXRlZF9hdCI6ICJGcmkgT2N0IDAzIDA3OjEwOjAxICswMDAwIDIwMjUiLCAiY3JlYXRlZF9pc28iOiAiMjAyNS0xMC0wM1QwNzoxMDowMSswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjUvMTAvMDMgMTY6MTAiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE5NzQwMDkwMjY4NTkyMjU0NTEiLCAibWVkaWEiOiBbeyJ0eXBlIjogInBob3RvIiwgInVybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvRzJVV2hVbmFJQUFHVzBhLmpwZyIsICJleHBhbmRlZF91cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTk3NDAwOTAyNjg1OTIyNTQ1MS9waG90by8xIn1dLCAiZmF2b3JpdGVfY291bnQiOiAxMzAxNTEsICJyZXR3ZWV0X2NvdW50IjogMjU5MjJ9LCB7ImlkIjogIjE5NzQwMDgyOTQzNzAxNDQ1MTYiLCAidGV4dCI6ICLpnZLjgY/jgpPjgbhcblJlR0xPU1PjgajjgZfjgabkuIDnt5LjgavmtLvli5XjgafjgY3jgabjgIHjgajjgaPjgabjgoLmpb3jgZfjgYvjgaPjgZ/jgojjgIJcblxu5LiA57eS44Gr44GK5Ye644GL44GR44GX44Gf44KK44CB44GK5rOK44KK44GX44Gf44KK44CB44Os44OD44K544Oz44GX44Gf44KK44CB6Z2S44GP44KT44Go6YGO44GU44GX44Gf5LiA5pel5LiA5pel44GM5aSn5LqL44Gq5oCd44GE5Ye644Gn44GZ44CCXG5cblJlR0xPU1Pjga415Lq644Gu5aSn5YiH44Gq5qSF5a2Q44GM44Gy44Go44Gk44G944Gj44GL44KK56m644GE44Gm44GX44G+44Gj44Gm44CB5a+C44GX44GP44Gq44GE44Go6KiA44Gj44Gf44KJ5ZiY44Gr44Gq44KK44G+44GZ44CCIiwgImNyZWF0ZWRfYXQiOiAiRnJpIE9jdCAwMyAwNzowNzowNyArMDAwMCAyMDI1IiwgImNyZWF0ZWRfaXNvIjogIjIwMjUtMTAtMDNUMDc6MDc6MDcrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI1LzEwLzAzIDE2OjA3IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xOTc0MDA4Mjk0MzcwMTQ0NTE2IiwgIm1lZGlhIjogW10sICJmYXZvcml0ZV9jb3VudCI6IDExNTk1NiwgInJldHdlZXRfY291bnQiOiAxMzk4Nn0sIHsiaWQiOiAiMTgyODc2OTQ0MDQ2NjcwMjMzOSIsICJ0ZXh0IjogIiPmuYrjgYLjgY/jgYLljZLmpa3jg6njgqTjg5Zcblxu44GE44Gj44Gm44KJ44Gj44GX44KD44GE77yBXG7jgb7jgZ/jganjgZPjgYvjgafvvIHvvIEiLCAiY3JlYXRlZF9hdCI6ICJXZWQgQXVnIDI4IDEyOjE5OjQ2ICswMDAwIDIwMjQiLCAiY3JlYXRlZF9pc28iOiAiMjAyNC0wOC0yOFQxMjoxOTo0NiswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjQvMDgvMjggMjE6MTkiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE4Mjg3Njk0NDA0NjY3MDIzMzkiLCAibWVkaWEiOiBbXSwgImZhdm9yaXRlX2NvdW50IjogNjEwMzQsICJyZXR3ZWV0X2NvdW50IjogNzU1OH0sIHsiaWQiOiAiMTgyMDgwMzU0ODA4NDU5NjkzNCIsICJ0ZXh0IjogIuOBneOBl+OBpuOAgeOBv+OBquOBleOCk+OBjOaAneOBo+OBpuOCi+OCiOOCiuOCguengeOBn+OBoeOBr+S7luS6uuOBruaEn+aDheOBq+W3puWPs+OBleOCjOOCi+OBl+OAgeeWsuOCjOOBpuOBl+OBvuOBhOOBvuOBmeOAglxu44GX44KT44Gp44GE44Gq44Gj44Gm5oCd44Gj44Gf44KJ44Gd44Gu44Go44GN44Gv5bCR44GX44Gg44GR44Kk44Oz44K/44O844ON44OD44OI44GL44KJ6Zui44KM44Gm44G/44Gm44GP44Gg44GV44GE44Gt44CCIiwgImNyZWF0ZWRfYXQiOiAiVHVlIEF1ZyAwNiAxMjo0NjowOSArMDAwMCAyMDI0IiwgImNyZWF0ZWRfaXNvIjogIjIwMjQtMDgtMDZUMTI6NDY6MDkrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI0LzA4LzA2IDIxOjQ2IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xODIwODAzNTQ4MDg0NTk2OTM0IiwgIm1lZGlhIjogW10sICJmYXZvcml0ZV9jb3VudCI6IDU2NDQzLCAicmV0d2VldF9jb3VudCI6IDgyNjN9LCB7ImlkIjogIjE5NzQwMjQyOTA0NjgyMzc3MDciLCAidGV4dCI6ICLjg5fjg6zjg5/jgqLlhazplovjgYLjgorjgYzjgajjgYbjgZTjgZbjgYTjgb7jgZfjgZ/jgIJcblxu44GT44Gu44Kr44OQ44O844Gu6KO95L2c5pyf6ZaTNeaXpeOBruOBquOBi+OBp+OAgeODrOOCs+ODvOODh+OCo+ODs+OCsOOBq+WNlOWKm+OBl+OBpuOBj+OCjOOBn+Wlj+OAgeiOieOAheiPr+OAgeOBr+OBmOOCgeOAgeOCruODquOCruODquOBvuOBp+iqv+aVtOOBl+OBpuOBj+OCjOOBn01JWOW4q+WFq+S5neWvuuOBl+OCk+OBmOOBleOCk+OAgeOCpOODqeOCueODiOOCkuS7leS4iuOBkuOBpuOBj+OCjOOBn+OCpOODqeOCueODiOODrOODvOOCv+ODvOODi+ODvOODj+OCquS4ieW5s+OBleOCk+OAgeOBneOBl+OBpuiBtOOBhOOBpuOBj+OBoOOBleOBo+OBn+OBv+OBquOBleOBvuOBq+acgOWkp+OBruaEn+isneOCkui+vOOCgeOBpuOAgiIsICJjcmVhdGVkX2F0IjogIkZyaSBPY3QgMDMgMDg6MTA6NDEgKzAwMDAgMjAyNSIsICJjcmVhdGVkX2lzbyI6ICIyMDI1LTEwLTAzVDA4OjEwOjQxKzAwOjAwIiwgImNyZWF0ZWRfbGFiZWwiOiAiMjAyNS8xMC8wMyAxNzoxMCIsICJ1cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTk3NDAyNDI5MDQ2ODIzNzcwNyIsICJtZWRpYSI6IFtdLCAiZmF2b3JpdGVfY291bnQiOiA1NjkzMiwgInJldHdlZXRfY291bnQiOiA4Mzg1fSwgeyJpZCI6ICIxOTMzNTMxMDAwMjY2NzY0Mzg0IiwgInRleHQiOiAi5pS544KB44G+44GX44Gm44CB5pys5pelNuaciDEz5pel5Lqs6YO95aSn5a2m44Oh44OH44Kj44Ki5paH5YyW5a2m44Gr44Gm54m55Yil6Kyb576p44KS44GV44Gb44Gm44GE44Gf44Gg44GN44G+44GX44Gf44O877yBXG5cbuOBqOOBpuOCguWFieaghOOBquOBk+OBqOOBp+OAgee3iuW8teOBl+OBpOOBpOOCgualveOBl+OBj+OBiuipseOBp+OBjeOBn+OBruOBi+OBquOBqOaAneOBhOOBvuOBmeOAglZ0dWJlcuOBruOCouOCpOODh+ODs+ODhuOCo+ODhuOCo+OChOS7leS6i+OBruOBk+OBqOOBquOBqeOAgeiHquWIhuOBruS9k+mok+OCkuOCguOBqOOBq+WWi+OCieOBm+OBpuOBhOOBn+OBoOOBjeOBvuOBl+OBn++8gVxuXG7osrTph43jgarmqZ/kvJrjgpLjgYLjgorjgYzjgajjgYbjgZTjgZbjgYTjgb7jgZfjgZ/vvIHvvIEgaHR0cHM6Ly90LmNvL3p6VWVydzZScGoiLCAiY3JlYXRlZF9hdCI6ICJGcmkgSnVuIDEzIDE0OjI0OjQ4ICswMDAwIDIwMjUiLCAiY3JlYXRlZF9pc28iOiAiMjAyNS0wNi0xM1QxNDoyNDo0OCswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjUvMDYvMTMgMjM6MjQiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE5MzM1MzEwMDAyNjY3NjQzODQiLCAibWVkaWEiOiBbeyJ0eXBlIjogInBob3RvIiwgInVybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvR3RWRzZ3dGJNQUV2WDBBLmpwZyIsICJleHBhbmRlZF91cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTkzMzUzMTAwMDI2Njc2NDM4NC9waG90by8xIn1dLCAiZmF2b3JpdGVfY291bnQiOiA1MjU1MCwgInJldHdlZXRfY291bnQiOiA1MDI1fSwgeyJpZCI6ICIxODkwMDA4MTI1Nzk0OTAyNTI0IiwgInRleHQiOiAi44OP44KhIOODiOOCpOODrOOCgueEoeOCp1xu5pmC6ZaT44KC54Sh44KnXG7jgYrphZLjgoLjgZ3jgozjgbvjgankvZnjgaPjgabnhKHjgqdcbuS8keOBv+OCgueEoeOCpyDkvZnoo5XjgoLnhKHjgqdcbuOBvuOBhOOBn+OBkeavjuaXpeOBkOODvOOCi+OBkOOCiyIsICJjcmVhdGVkX2F0IjogIlRodSBGZWIgMTMgMTI6MDA6MjYgKzAwMDAgMjAyNSIsICJjcmVhdGVkX2lzbyI6ICIyMDI1LTAyLTEzVDEyOjAwOjI2KzAwOjAwIiwgImNyZWF0ZWRfbGFiZWwiOiAiMjAyNS8wMi8xMyAyMTowMCIsICJ1cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTg5MDAwODEyNTc5NDkwMjUyNCIsICJtZWRpYSI6IFtdLCAiZmF2b3JpdGVfY291bnQiOiA0Njg0OCwgInJldHdlZXRfY291bnQiOiA0OTcwfSwgeyJpZCI6ICIxODU0MzYxNzIyNDY0OTQwMzU3IiwgInRleHQiOiAiaHR0cHM6Ly90LmNvL3JZb0s2OVZIUzciLCAiY3JlYXRlZF9hdCI6ICJUaHUgTm92IDA3IDAzOjE0OjIxICswMDAwIDIwMjQiLCAiY3JlYXRlZF9pc28iOiAiMjAyNC0xMS0wN1QwMzoxNDoyMSswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjQvMTEvMDcgMTI6MTQiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE4NTQzNjE3MjI0NjQ5NDAzNTciLCAibWVkaWEiOiBbeyJ0eXBlIjogInBob3RvIiwgInVybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvR2J3RUtJUWFJQUFwRGVzLmpwZyIsICJleHBhbmRlZF91cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTg1NDM2MTcyMjQ2NDk0MDM1Ny9waG90by8xIn1dLCAiZmF2b3JpdGVfY291bnQiOiA0NTIzOCwgInJldHdlZXRfY291bnQiOiA1NDc3fSwgeyJpZCI6ICIxODIwODAxMzU4MjcyMDI4NzM1IiwgInRleHQiOiAi44Gp44KT44Gq5oSf5oOF44KC44GC44Gq44Gf44Gu44KC44Gu44Gq44Gu44Gn44CB5aSn5YiH44Gr44GX44Gm44GC44GS44Gm44GP44Gg44GV44GE44CCIiwgImNyZWF0ZWRfYXQiOiAiVHVlIEF1ZyAwNiAxMjozNzoyNyArMDAwMCAyMDI0IiwgImNyZWF0ZWRfaXNvIjogIjIwMjQtMDgtMDZUMTI6Mzc6MjcrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI0LzA4LzA2IDIxOjM3IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xODIwODAxMzU4MjcyMDI4NzM1IiwgIm1lZGlhIjogW10sICJmYXZvcml0ZV9jb3VudCI6IDQ0MTQ2LCAicmV0d2VldF9jb3VudCI6IDY4NTN9XX0=';
-​
-  var SEED = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(SEED_B64), function (c) {
-    return c.charCodeAt(0);
-  })));
-​
-  var profileEl = document.getElementById('profile');
-  var bannerEl = document.getElementById('profile-banner');
-  var feedEl = document.getElementById('feed');
-  var updatedLabel = document.getElementById('updated-label');
-  var openX = document.getElementById('open-x');
-  var toast = document.getElementById('toast');
-  var refreshBtn = document.getElementById('refresh-profile');
-  var state = JSON.parse(JSON.stringify(SEED));
-​
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+  "use strict";
+
+  function decodeSeedB64(b64) {
+    var bin = atob(b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder("utf-8").decode(bytes));
   }
-​
+
+  function showToast(msg) {
+    var toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 2200);
+  }
+
   function escapeHtml(s) {
     return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
-​
+
   function linkify(text) {
-    var s = escapeHtml(text || '');
+    var s = escapeHtml(text || "");
     s = s.replace(/(https?:\/\/[^\s<]+)/g, function (m) {
-      var clean = m.replace(/[)\].,!?]+$/g, '');
+      var clean = m.replace(/[)\].,!?]+$/g, "");
       var trail = m.slice(clean.length);
-      return '<a href="' + clean + '" target="_blank" rel="noopener noreferrer">' + clean + '</a>' + trail;
+      return '<a href="' + clean + '" target="_blank" rel="noopener noreferrer">' + clean + "</a>" + trail;
     });
     s = s.replace(/@([A-Za-z0-9_]+)/g, '<a href="https://x.com/$1" target="_blank" rel="noopener noreferrer">@$1</a>');
     s = s.replace(/#([0-9A-Za-z_\u00C0-\u024F\u3040-\u30FF\u3400-\u9FFF]+)/g,
       '<a href="https://x.com/hashtag/$1" target="_blank" rel="noopener noreferrer">#$1</a>');
     return s;
   }
-​
+
   function formatCount(n) {
-    if (n == null || n === '') return null;
+    if (n == null || n === "") return null;
     var num = Number(n);
     if (isNaN(num)) return null;
-    return new Intl.NumberFormat('ja-JP').format(num);
+    return new Intl.NumberFormat("ja-JP").format(num);
   }
-​
+
   function formatFetchedAt(iso) {
-    if (!iso) return '更新日時不明';
+    if (!iso) return "更新日時不明";
     try {
-      return 'データ取得: ' + new Date(iso).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+      return "データ取得: " + new Date(iso).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
     } catch (e) {
-      return 'データ取得: ' + iso;
+      return "データ取得: " + iso;
     }
   }
-​
-  function renderProfile(p) {
-    p = p || {};
-    var followers = formatCount(p.followers);
-    var tweets = formatCount(p.tweets);
-    if (p.banner_url) {
-      bannerEl.style.backgroundImage = 'url("' + String(p.banner_url).replace(/"/g, '\\"') + '")';
-    } else {
-      bannerEl.style.backgroundImage = '';
+
+  function createApp(seed) {
+    var state = JSON.parse(JSON.stringify(seed));
+    var profileEl = document.getElementById("profile");
+    var bannerEl = document.getElementById("profile-banner");
+    var feedEl = document.getElementById("feed");
+    var updatedLabel = document.getElementById("updated-label");
+    var openX = document.getElementById("open-x");
+    var refreshBtn = document.getElementById("refresh-profile");
+
+    function renderProfile(p) {
+      p = p || {};
+      var followers = formatCount(p.followers);
+      var tweets = formatCount(p.tweets);
+      if (bannerEl) {
+        bannerEl.style.backgroundImage = p.banner_url
+          ? 'url("' + String(p.banner_url).replace(/"/g, '\\"') + '")'
+          : "";
+      }
+      profileEl.innerHTML =
+        '<img class="avatar" src="' + escapeHtml(p.avatar_url || "") + '" alt="" width="72" height="72" loading="lazy" referrerpolicy="no-referrer" />' +
+        '<div class="profile-main">' +
+          '<p class="profile-name">' + escapeHtml(p.name || "") + "</p>" +
+          '<p class="profile-handle">@' + escapeHtml(p.screen_name || "") + "</p>" +
+        "</div>" +
+        (p.description ? '<p class="profile-bio">' + escapeHtml(p.description) + "</p>" : "") +
+        '<div class="profile-meta">' +
+          (followers != null ? '<span class="chip">フォロワー ' + followers + "</span>" : "") +
+          (tweets != null ? '<span class="chip">投稿 ' + tweets + "</span>" : "") +
+          (p.website ? '<a class="chip" href="' + escapeHtml(p.website) + '" target="_blank" rel="noopener noreferrer">Web</a>' : "") +
+        "</div>";
+      openX.href = p.url || ("https://x.com/" + (p.screen_name || "juufuuteiraden"));
     }
-    profileEl.innerHTML =
-      '<img class="avatar" src="' + escapeHtml(p.avatar_url || '') + '" alt="" width="72" height="72" loading="lazy" referrerpolicy="no-referrer" />' +
-      '<div class="profile-main">' +
-        '<p class="profile-name">' + escapeHtml(p.name || '') + '</p>' +
-        '<p class="profile-handle">@' + escapeHtml(p.screen_name || '') + '</p>' +
-      '</div>' +
-      (p.description ? '<p class="profile-bio">' + escapeHtml(p.description) + '</p>' : '') +
-      '<div class="profile-meta">' +
-        (followers != null ? '<span class="chip">フォロワー ' + followers + '</span>' : '') +
-        (tweets != null ? '<span class="chip">投稿 ' + tweets + '</span>' : '') +
-        (p.website ? '<a class="chip" href="' + escapeHtml(p.website) + '" target="_blank" rel="noopener noreferrer">Web</a>' : '') +
-      '</div>';
-    openX.href = p.url || ('https://x.com/' + (p.screen_name || 'juufuuteiraden'));
-  }
-​
-  function renderPosts(posts) {
-    var profile = state.profile || {};
-    if (!posts || !posts.length) {
-      feedEl.innerHTML = '<div class="empty">表示できる投稿がありません</div>';
-      return;
+
+    function bindPostCards() {
+      var cards = feedEl.querySelectorAll(".post-card[data-url]");
+      for (var i = 0; i < cards.length; i++) {
+        (function (card) {
+          card.addEventListener("click", function (e) {
+            if (e.target.closest("a")) return;
+            var url = card.getAttribute("data-url");
+            if (url) window.open(url, "_blank", "noopener,noreferrer");
+          });
+          card.addEventListener("keydown", function (e) {
+            if ((e.key === "Enter" || e.key === " ") && !e.target.closest("a")) {
+              e.preventDefault();
+              var url = card.getAttribute("data-url");
+              if (url) window.open(url, "_blank", "noopener,noreferrer");
+            }
+          });
+        })(cards[i]);
+      }
     }
-    feedEl.innerHTML = posts.map(function (post) {
-      var mediaItems = (post.media || []).filter(function (m) { return m && m.url; }).slice(0, 4);
-      var mediaClass = mediaItems.length > 1 ? 'media multi' : 'media single';
-      var media = mediaItems.map(function (m) {
-        return '<img src="' + escapeHtml(m.url) + '" alt="" loading="lazy" referrerpolicy="no-referrer" />';
-      }).join('');
-      var fav = formatCount(post.favorite_count);
-      var rt = formatCount(post.retweet_count);
-      return (
-        '<article class="post-card" data-url="' + escapeHtml(post.url) + '" tabindex="0" role="link" aria-label="投稿をXで開く">' +
-          '<div class="post-head">' +
-            '<img class="post-avatar" src="' + escapeHtml(profile.avatar_url || '') + '" alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer" />' +
-            '<div class="post-who">' +
-              '<p class="post-who-name">' + escapeHtml(profile.name || '') + '</p>' +
-              '<p class="post-who-sub">@' + escapeHtml(profile.screen_name || '') + '</p>' +
-            '</div>' +
-            '<span class="post-time">' + escapeHtml(post.created_label || post.created_at || '') + '</span>' +
-          '</div>' +
-          '<p class="post-text">' + linkify(post.text || '') + '</p>' +
-          (media ? '<div class="' + mediaClass + '">' + media + '</div>' : '') +
-          '<div class="post-foot">' +
-            '<div class="post-stats">' +
-              (rt != null ? '<span>RT ' + rt + '</span>' : '') +
-              (fav != null ? '<span>いいね ' + fav + '</span>' : '') +
-            '</div>' +
-            '<a class="post-cta" href="' + escapeHtml(post.url) + '" target="_blank" rel="noopener noreferrer">投稿を見る →</a>' +
-          '</div>' +
-        '</article>'
-      );
-    }).join('');
-  }
-​
-​
-  function bindPostCards() {
-    var cards = feedEl.querySelectorAll('.post-card[data-url]');
-    cards.forEach(function (card) {
-      card.addEventListener('click', function (e) {
-        if (e.target.closest('a')) return; // let inner links work
-        var url = card.getAttribute('data-url');
-        if (url) window.open(url, '_blank', 'noopener,noreferrer');
-      });
-      card.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          if (e.target.closest('a')) return;
-          e.preventDefault();
-          var url = card.getAttribute('data-url');
-          if (url) window.open(url, '_blank', 'noopener,noreferrer');
-        }
-      });
-    });
-  }
-​
-  function renderAll() {
-    renderProfile(state.profile || {});
-    renderPosts(state.posts || []);
-    bindPostCards();
-    updatedLabel.textContent = formatFetchedAt(state.fetched_at);
-  }
-​
-  function refreshProfile(opts) {
-    opts = opts || {};
-    var silent = !!opts.silent;
-    var username = (state.username || 'juufuuteiraden').replace(/^@/, '');
-    refreshBtn.disabled = true;
-    var ctrl = new AbortController();
-    var timer = setTimeout(function () { ctrl.abort(); }, 8000);
-    fetch('https://api.fxtwitter.com/' + encodeURIComponent(username), {
-      headers: { 'Accept': 'application/json' },
-      signal: ctrl.signal
-    }).then(function (res) {
-      clearTimeout(timer);
-      if (!res.ok) throw new Error('http ' + res.status);
-      return res.json();
-    }).then(function (json) {
-      if (!json || !json.user) throw new Error('no user');
-      var u = json.user;
-      state.profile = {
-        name: u.name || state.profile.name,
-        screen_name: u.screen_name || username,
-        description: u.description || '',
-        avatar_url: (u.avatar_url || '').replace('_normal', '_bigger'),
-        banner_url: u.banner_url || '',
-        url: u.url || ('https://x.com/' + username),
-        followers: u.followers,
-        tweets: u.tweets,
-        website: u.website && u.website.url ? u.website.url : (u.website || null)
-      };
-      renderProfile(state.profile);
-      renderPosts(state.posts || []);
+
+    function renderPosts(posts) {
+      var profile = state.profile || {};
+      if (!posts || !posts.length) {
+        feedEl.innerHTML = '<div class="empty">表示できる投稿がありません</div>';
+        return;
+      }
+      feedEl.innerHTML = posts.map(function (post) {
+        var mediaItems = (post.media || []).filter(function (m) { return m && m.url; }).slice(0, 4);
+        var mediaClass = mediaItems.length > 1 ? "media multi" : "media single";
+        var media = mediaItems.map(function (m) {
+          return '<img src="' + escapeHtml(m.url) + '" alt="" loading="lazy" referrerpolicy="no-referrer" />';
+        }).join("");
+        var fav = formatCount(post.favorite_count);
+        var rt = formatCount(post.retweet_count);
+        return (
+          '<article class="post-card" data-url="' + escapeHtml(post.url) + '" tabindex="0" role="link" aria-label="投稿をXで開く">' +
+            '<div class="post-head">' +
+              '<img class="post-avatar" src="' + escapeHtml(profile.avatar_url || "") + '" alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer" />' +
+              '<div class="post-who">' +
+                '<p class="post-who-name">' + escapeHtml(profile.name || "") + "</p>" +
+                '<p class="post-who-sub">@' + escapeHtml(profile.screen_name || "") + "</p>" +
+              "</div>" +
+              '<span class="post-time">' + escapeHtml(post.created_label || post.created_at || "") + "</span>" +
+            "</div>" +
+            '<p class="post-text">' + linkify(post.text || "") + "</p>" +
+            (media ? '<div class="' + mediaClass + '">' + media + "</div>" : "") +
+            '<div class="post-foot">' +
+              '<div class="post-stats">' +
+                (rt != null ? "<span>RT " + rt + "</span>" : "") +
+                (fav != null ? "<span>いいね " + fav + "</span>" : "") +
+              "</div>" +
+              '<a class="post-cta" href="' + escapeHtml(post.url) + '" target="_blank" rel="noopener noreferrer">投稿を見る →</a>' +
+            "</div>" +
+          "</article>"
+        );
+      }).join("");
       bindPostCards();
-      if (!silent) showToast('プロフィールを更新しました');
-    }).catch(function () {
-      if (!silent) showToast('プロフィール更新に失敗しました');
-    }).finally(function () {
-      refreshBtn.disabled = false;
+    }
+
+    function renderAll() {
+      renderProfile(state.profile || {});
+      renderPosts(state.posts || []);
+      updatedLabel.textContent = formatFetchedAt(state.fetched_at);
+    }
+
+    function refreshProfile(opts) {
+      opts = opts || {};
+      var silent = !!opts.silent;
+      var username = (state.username || "juufuuteiraden").replace(/^@/, "");
+      refreshBtn.disabled = true;
+      var ctrl = new AbortController();
+      var timer = setTimeout(function () { ctrl.abort(); }, 8000);
+      fetch("https://api.fxtwitter.com/" + encodeURIComponent(username), {
+        headers: { Accept: "application/json" },
+        signal: ctrl.signal
+      }).then(function (res) {
+        clearTimeout(timer);
+        if (!res.ok) throw new Error("http " + res.status);
+        return res.json();
+      }).then(function (json) {
+        if (!json || !json.user) throw new Error("no user");
+        var u = json.user;
+        state.profile = {
+          name: u.name || state.profile.name,
+          screen_name: u.screen_name || username,
+          description: u.description || "",
+          avatar_url: (u.avatar_url || "").replace("_normal", "_bigger"),
+          banner_url: u.banner_url || "",
+          url: u.url || ("https://x.com/" + username),
+          followers: u.followers,
+          tweets: u.tweets,
+          website: u.website && u.website.url ? u.website.url : (u.website || null)
+        };
+        renderProfile(state.profile);
+        renderPosts(state.posts || []);
+        if (!silent) showToast("プロフィールを更新しました");
+      }).catch(function () {
+        if (!silent) showToast("プロフィール更新に失敗しました");
+      }).finally(function () {
+        refreshBtn.disabled = false;
+      });
+    }
+
+    refreshBtn.addEventListener("click", function () {
+      refreshProfile({ silent: false });
     });
-  }
-​
-  refreshBtn.addEventListener('click', function () { refreshProfile({ silent: false }); });
-​
-  try {
+
     renderAll();
-  } catch (e) {
-    updatedLabel.textContent = '表示エラー';
-    feedEl.innerHTML = '<div class="empty">表示に失敗しました。ページを再読み込みしてください。</div>';
-    console.error(e);
+    refreshProfile({ silent: true });
   }
-​
-  refreshProfile({ silent: true });
+
+  function fail(msg) {
+    var updatedLabel = document.getElementById("updated-label");
+    var feedEl = document.getElementById("feed");
+    if (updatedLabel) updatedLabel.textContent = "表示エラー";
+    if (feedEl) feedEl.innerHTML = '<div class="empty">' + escapeHtml(msg) + "</div>";
+  }
+
+  function boot(seed) {
+    try {
+      createApp(seed);
+    } catch (e) {
+      console.error(e);
+      fail("表示に失敗しました。ページを再読み込みしてください。");
+    }
+  }
+
+  // 1) data.json を優先  2) だめなら埋め込みSEED
+  var embedded = null;
+  try {
+    if (window.__TIMELINE_SEED_B64__) {
+      embedded = decodeSeedB64(window.__TIMELINE_SEED_B64__);
+    }
+  } catch (e) {
+    console.warn("embedded seed decode failed", e);
+  }
+
+  fetch("./data.json", { cache: "no-store" })
+    .then(function (res) {
+      if (!res.ok) throw new Error("data.json http " + res.status);
+      return res.json();
+    })
+    .then(function (json) { boot(json); })
+    .catch(function (err) {
+      console.warn("data.json load failed, fallback to embedded", err);
+      if (embedded) boot(embedded);
+      else fail("data.json を読み込めません。同じフォルダに data.json があるか確認してください。");
+    });
 })();
+
   </script>
 </body>
 </html>
-​
