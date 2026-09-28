@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>X Timeline 簡易版 v2</title>
+  <title>X Timeline 簡易版 カード v2</title>
   <style>
     :root {
       --text: #2C2C2B;
       --text-secondary: #7D7A75;
-      --canvas: #FFFFFF;
-      --surface: #F9F8F7;
+      --canvas: #F4F3F1;
+      --surface: #FFFFFF;
       --surface-2: #F0EFED;
       --border: #E6E5E3;
       --accent: #2783DE;
       --accent-soft: #E5F2FC;
-      --radius: 8px;
+      --radius: 12px;
       --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 12px rgba(0,0,0,.04);
     }
     @media (prefers-color-scheme: dark) {
       :root {
         --text: #FFFFFF;
         --text-secondary: rgba(255,255,255,.65);
-        --canvas: #191919;
+        --canvas: #141414;
         --surface: #202020;
-        --surface-2: #383836;
-        --border: rgba(255,255,255,.20);
+        --surface-2: #2A2A28;
+        --border: rgba(255,255,255,.16);
         --accent: #5E9FE8;
-        --accent-soft: rgba(94,159,232,.12);
+        --accent-soft: rgba(94,159,232,.14);
         --shadow: none;
       }
     }
@@ -41,25 +41,16 @@
       -webkit-font-smoothing: antialiased;
     }
     .page {
-      max-width: 560px;
+      max-width: 640px;
       margin: 0 auto;
       padding: 24px 16px 40px;
     }
-    .widget {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .header {
+    .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
+      margin-bottom: 16px;
     }
     .brand {
       display: flex;
@@ -68,37 +59,35 @@
       min-width: 0;
     }
     .logo { width: 22px; height: 22px; color: var(--text); flex-shrink: 0; }
-    .header h1 {
+    .brand h1 {
       margin: 0;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
-    .header .sub {
+    .brand p {
       margin: 2px 0 0;
       font-size: 12px;
       color: var(--text-secondary);
     }
-    .actions {
-      display: flex;
-      gap: 6px;
-      flex-shrink: 0;
-    }
+    .actions { display: flex; gap: 8px; flex-shrink: 0; }
     .btn {
       appearance: none;
       border: 1px solid var(--border);
-      background: var(--canvas);
+      background: var(--surface);
       color: var(--text-secondary);
-      border-radius: var(--radius);
-      min-height: 32px;
-      padding: 0 10px;
+      border-radius: 8px;
+      min-height: 36px;
+      padding: 0 12px;
       font: inherit;
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      box-shadow: var(--shadow);
     }
     .btn:hover { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
     .btn-primary {
@@ -107,27 +96,46 @@
       color: #fff;
     }
     .btn-primary:hover { opacity: .92; color: #fff; background: var(--accent); }
-    .profile {
+​
+    /* Profile card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .profile-card { margin-bottom: 16px; }
+    .profile-banner {
+      height: 88px;
+      background:
+        linear-gradient(135deg, rgba(39,131,222,.18), rgba(39,131,222,.02)),
+        var(--surface-2);
+      background-size: cover;
+      background-position: center;
+    }
+    .profile-body {
       display: grid;
-      grid-template-columns: 56px 1fr;
+      grid-template-columns: 72px 1fr;
       gap: 12px;
-      padding: 16px;
-      border-bottom: 1px solid var(--border);
-      background: var(--canvas);
+      padding: 0 16px 16px;
+      margin-top: -28px;
     }
     .avatar {
-      width: 56px;
-      height: 56px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       object-fit: cover;
       background: var(--surface-2);
-      border: 1px solid var(--border);
+      border: 3px solid var(--surface);
+      box-shadow: var(--shadow);
     }
+    .profile-main { padding-top: 34px; min-width: 0; }
     .profile-name {
       margin: 0;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
     .profile-handle {
       margin: 2px 0 0;
@@ -135,48 +143,110 @@
       font-size: 13px;
     }
     .profile-bio {
-      margin: 8px 0 0;
-      font-size: 13px;
+      grid-column: 1 / -1;
+      margin: 4px 0 0;
+      font-size: 14px;
       color: var(--text);
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
     .profile-meta {
-      margin: 8px 0 0;
+      grid-column: 1 / -1;
+      margin-top: 10px;
       display: flex;
       flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+    a.chip:hover { background: var(--accent-soft); color: var(--accent); }
+​
+    .section-label {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+​
+    /* Post cards grid/list */
+    .feed {
+      display: grid;
+      gap: 12px;
+    }
+    .post-card {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      color: var(--text);
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    .post-card:hover {
+      border-color: rgba(39,131,222,.35);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06), 0 8px 20px rgba(0,0,0,.04);
+    }
+    .post-card:focus-within {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .post-card:hover {
+        border-color: rgba(94,159,232,.45);
+        box-shadow: none;
+      }
+    }
+    .post-head {
+      display: flex;
+      align-items: center;
       gap: 10px;
+      margin-bottom: 10px;
+    }
+    .post-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .post-who { min-width: 0; flex: 1; }
+    .post-who-name {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .post-who-sub {
+      margin: 1px 0 0;
       font-size: 12px;
       color: var(--text-secondary);
-    }
-    .feed {
-      background: var(--canvas);
-      max-height: min(70vh, 720px);
-      overflow: auto;
-    }
-    a.post {
-      display: block;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text) !important;
-      text-decoration: none !important;
-      transition: background .12s ease;
-    }
-    a.post:visited, a.post:hover, a.post:active {
-      color: var(--text) !important;
-      text-decoration: none !important;
-    }
-    a.post:hover { background: var(--surface); }
-    .post-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .post-time {
-      color: var(--text-secondary);
       font-size: 12px;
+      color: var(--text-secondary);
       white-space: nowrap;
+      flex-shrink: 0;
     }
     .post-text {
       margin: 0;
@@ -185,45 +255,69 @@
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
-    .post-text a {
-      color: var(--accent);
-      text-decoration: none;
-    }
+    .post-text a { color: var(--accent); text-decoration: none; }
     .post-text a:hover { text-decoration: underline; }
     .media {
-      margin-top: 10px;
+      margin-top: 12px;
       display: grid;
       gap: 8px;
-      grid-template-columns: 1fr;
     }
-    .media img {
+    .media.single img {
       width: 100%;
-      max-height: 280px;
+      max-height: 320px;
       object-fit: cover;
       border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--surface-2);
     }
-    .post-stats {
-      margin-top: 10px;
+    .media.multi {
+      grid-template-columns: 1fr 1fr;
+    }
+    .media.multi img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .post-foot {
+      margin-top: 12px;
       display: flex;
-      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .post-stats {
+      display: flex;
+      gap: 12px;
       color: var(--text-secondary);
       font-size: 12px;
+      font-weight: 600;
     }
-    .footer {
-      padding: 10px 16px 12px;
-      border-top: 1px solid var(--border);
+    .post-cta {
       font-size: 12px;
-      color: var(--text-secondary);
-      text-align: center;
-      background: var(--surface);
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
     }
+    .post-cta:hover { text-decoration: underline; }
+    .post-card { cursor: pointer; }
     .empty {
-      padding: 40px 20px;
+      padding: 32px 16px;
       text-align: center;
       color: var(--text-secondary);
       font-size: 14px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+    .note {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
     .toast {
       position: fixed;
@@ -243,194 +337,254 @@
     .toast.show { opacity: 1; }
     @media (max-width: 420px) {
       .page { padding: 16px 12px 32px; }
-      .header { flex-direction: column; align-items: flex-start; }
+      .topbar { flex-direction: column; align-items: flex-start; }
       .actions { width: 100%; }
       .actions .btn { flex: 1; }
+      .profile-body { grid-template-columns: 64px 1fr; }
+      .avatar { width: 64px; height: 64px; }
+      .media.multi img { height: 110px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .post-card { transition: none; }
+      .post-card:hover { transform: none; }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <section class="widget" aria-label="Xタイムライン簡易版">
-      <header class="header">
-        <div class="brand">
-          <svg class="logo" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.828L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
-          </svg>
-          <div>
-            <h1>X Timeline 簡易版</h1>
-            <p class="sub" id="updated-label">読み込み中…</p>
-          </div>
+    <div class="topbar">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.828L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+        </svg>
+        <div>
+          <h1>X Timeline</h1>
+          <p id="updated-label">表示準備中…</p>
         </div>
-        <div class="actions">
-          <button type="button" class="btn" id="refresh-profile">プロフィール更新</button>
-          <a class="btn btn-primary" id="open-x" href="https://x.com/juufuuteiraden" target="_blank" rel="noopener noreferrer">Xで開く</a>
-        </div>
-      </header>
-​
-      <div class="profile" id="profile"></div>
-      <div class="feed" id="feed" aria-live="polite"></div>
-      <div class="footer">
-        公式埋め込み不使用 · Rate limit の影響を受けにくい簡易カード表示<br />
-        投稿本文はスナップショットです。最新は「Xで開く」から確認できます。
       </div>
+      <div class="actions">
+        <button type="button" class="btn" id="refresh-profile">プロフィール更新</button>
+        <a class="btn btn-primary" id="open-x" href="https://x.com/juufuuteiraden" target="_blank" rel="noopener noreferrer">Xで開く</a>
+      </div>
+    </div>
+​
+    <section class="card profile-card" aria-label="プロフィール">
+      <div class="profile-banner" id="profile-banner"></div>
+      <div class="profile-body" id="profile"></div>
     </section>
+​
+    <p class="section-label">最近の投稿</p>
+    <section class="feed" id="feed" aria-label="投稿カード一覧" aria-live="polite"></section>
+​
+    <p class="note">
+      簡易カード表示 · 公式埋め込み不使用<br />
+      投稿本文はスナップショットです。最新は「Xで開く」から確認できます。
+    </p>
   </main>
   <div class="toast" id="toast" role="status"></div>
 ​
   <script>
-    // 初期データ（スナップショット）
-    const SEED = {"username": "juufuuteiraden", "fetched_at": "2026-09-28T07:14:48Z", "profile": {"name": "儒烏風亭らでん🐚ReGLOSS", "screen_name": "juufuuteiraden", "description": "寄ってらっしゃい見てらっしゃい hololive DEV_ISからデビューしたReGLOSSの儒烏風亭らでんと申します！\n美術や美術館、落語が好きです。歌ったり踊ったりもします。\nホロライブプロダクション | ママ: @kaoming775 | パパ: @keffiy | ファンアート #らでん似絵 |", "avatar_url": "https://pbs.twimg.com/profile_images/2098728433828462592/u8l2nGAi_bigger.png", "banner_url": "https://pbs.twimg.com/profile_banners/1677218658152759296/1789210826", "url": "https://x.com/juufuuteiraden", "followers": 514845, "tweets": 10295, "website": "https://www.youtube.com/@JuufuuteiRaden"}, "posts": [{"id": "2098261704161567172", "text": "🐚イベント＆グッズ情報一覧🐚\n\n2026年夏から2027年1月にかけてのイベント＆グッズ一覧はこちらでーん！！\n\nこちらが最新版です👀✨\n\n神出鬼没のらでんですがどうぞよろしくお願いいたします！！！ https://t.co/emXjC2lZ9O", "created_at": "Fri Sep 11 04:05:48 +0000 2026", "created_iso": "2026-09-11T04:05:48+00:00", "created_label": "2026/09/11 13:05", "url": "https://x.com/juufuuteiraden/status/2098261704161567172", "media": [{"type": "photo", "url": "https://pbs.twimg.com/media/HR6F5gIaYAE4QNT.jpg", "expanded_url": "https://x.com/juufuuteiraden/status/2098261704161567172/photo/1"}], "favorite_count": 3994, "retweet_count": 668}, {"id": "1974009026859225451", "text": "【cover】さよーならまたいつか！【ReGLOSSより】 https://t.co/yo2H9PoxWB @YouTubeより \n\nReGLOSSより青くんへ\nReGLOSSよりみんなへ\nReGLOSSより私たちへ https://t.co/At3Qpp5cTy", "created_at": "Fri Oct 03 07:10:01 +0000 2025", "created_iso": "2025-10-03T07:10:01+00:00", "created_label": "2025/10/03 16:10", "url": "https://x.com/juufuuteiraden/status/1974009026859225451", "media": [{"type": "photo", "url": "https://pbs.twimg.com/media/G2UWhUnaIAAGW0a.jpg", "expanded_url": "https://x.com/juufuuteiraden/status/1974009026859225451/photo/1"}], "favorite_count": 130151, "retweet_count": 25922}, {"id": "1974008294370144516", "text": "青くんへ\nReGLOSSとして一緒に活動できて、とっても楽しかったよ。\n\n一緒にお出かけしたり、お泊りしたり、レッスンしたり、青くんと過ごした一日一日が大事な思い出です。\n\nReGLOSSの5人の大切な椅子がひとつぽっかり空いてしまって、寂しくないと言ったら嘘になります。", "created_at": "Fri Oct 03 07:07:07 +0000 2025", "created_iso": "2025-10-03T07:07:07+00:00", "created_label": "2025/10/03 16:07", "url": "https://x.com/juufuuteiraden/status/1974008294370144516", "media": [], "favorite_count": 115956, "retweet_count": 13986}, {"id": "1828769440466702339", "text": "#湊あくあ卒業ライブ\n\nいってらっしゃい！\nまたどこかで！！", "created_at": "Wed Aug 28 12:19:46 +0000 2024", "created_iso": "2024-08-28T12:19:46+00:00", "created_label": "2024/08/28 21:19", "url": "https://x.com/juufuuteiraden/status/1828769440466702339", "media": [], "favorite_count": 61034, "retweet_count": 7558}, {"id": "1820803548084596934", "text": "そして、みなさんが思ってるよりも私たちは他人の感情に左右されるし、疲れてしまいます。\nしんどいなって思ったらそのときは少しだけインターネットから離れてみてくださいね。", "created_at": "Tue Aug 06 12:46:09 +0000 2024", "created_iso": "2024-08-06T12:46:09+00:00", "created_label": "2024/08/06 21:46", "url": "https://x.com/juufuuteiraden/status/1820803548084596934", "media": [], "favorite_count": 56443, "retweet_count": 8263}, {"id": "1974024290468237707", "text": "プレミア公開ありがとうございました。\n\nこのカバーの製作期間5日のなかで、レコーディングに協力してくれた奏、莉々華、はじめ、ギリギリまで調整してくれたMIX師八九寺しんじさん、イラストを仕上げてくれたイラストレーターニーハオ三平さん、そして聴いてくださったみなさまに最大の感謝を込めて。", "created_at": "Fri Oct 03 08:10:41 +0000 2025", "created_iso": "2025-10-03T08:10:41+00:00", "created_label": "2025/10/03 17:10", "url": "https://x.com/juufuuteiraden/status/1974024290468237707", "media": [], "favorite_count": 56932, "retweet_count": 8385}, {"id": "1933531000266764384", "text": "改めまして、本日6月13日京都大学メディア文化学にて特別講義をさせていただきましたー！\n\nとても光栄なことで、緊張しつつも楽しくお話できたのかなと思います。Vtuberのアイデンティティや仕事のことなど、自分の体験をもとに喋らせていただきました！\n\n貴重な機会をありがとうございました！！ https://t.co/zzUerw6Rpj", "created_at": "Fri Jun 13 14:24:48 +0000 2025", "created_iso": "2025-06-13T14:24:48+00:00", "created_label": "2025/06/13 23:24", "url": "https://x.com/juufuuteiraden/status/1933531000266764384", "media": [{"type": "photo", "url": "https://pbs.twimg.com/media/GtVG6wtbMAEvX0A.jpg", "expanded_url": "https://x.com/juufuuteiraden/status/1933531000266764384/photo/1"}], "favorite_count": 52550, "retweet_count": 5025}, {"id": "1890008125794902524", "text": "ハァ トイレも無ェ\n時間も無ェ お酒もそれほど余って無ェ 休みも無ェ 余裕も無ェ まいたけ毎日ぐーるぐる", "created_at": "Thu Feb 13 12:00:26 +0000 2025", "created_iso": "2025-02-13T12:00:26+00:00", "created_label": "2025/02/13 21:00", "url": "https://x.com/juufuuteiraden/status/1890008125794902524", "media": [], "favorite_count": 46848, "retweet_count": 4970}, {"id": "1854361722464940357", "text": "https://t.co/rYoK69VHS7", "created_at": "Thu Nov 07 03:14:21 +0000 2024", "created_iso": "2024-11-07T03:14:21+00:00", "created_label": "2024/11/07 12:14", "url": "https://x.com/juufuuteiraden/status/1854361722464940357", "media": [{"type": "photo", "url": "https://pbs.twimg.com/media/GbwEKIQaIAApDes.jpg", "expanded_url": "https://x.com/juufuuteiraden/status/1854361722464940357/photo/1"}], "favorite_count": 45238, "retweet_count": 5477}, {"id": "1820801358272028735", "text": "どんな感情もあなたのものなので、大切にしてあげてください。", "created_at": "Tue Aug 06 12:37:27 +0000 2024", "created_iso": "2024-08-06T12:37:27+00:00", "created_label": "2024/08/06 21:37", "url": "https://x.com/juufuuteiraden/status/1820801358272028735", "media": [], "favorite_count": 44146, "retweet_count": 6853}]};
+(function () {
+  var SEED_B64 = 'eyJ1c2VybmFtZSI6ICJqdXVmdXV0ZWlyYWRlbiIsICJmZXRjaGVkX2F0IjogIjIwMjYtMDktMjhUMDc6MTQ6NDhaIiwgInByb2ZpbGUiOiB7Im5hbWUiOiAi5YSS54OP6aKo5Lqt44KJ44Gn44KT8J+QmlJlR0xPU1MiLCAic2NyZWVuX25hbWUiOiAianV1ZnV1dGVpcmFkZW4iLCAiZGVzY3JpcHRpb24iOiAi5a+E44Gj44Gm44KJ44Gj44GX44KD44GE6KaL44Gm44KJ44Gj44GX44KD44GEIGhvbG9saXZlIERFVl9JU+OBi+OCieODh+ODk+ODpeODvOOBl+OBn1JlR0xPU1Pjga7lhJLng4/poqjkuq3jgonjgafjgpPjgajnlLPjgZfjgb7jgZnvvIFcbue+juihk+OChOe+juihk+mkqOOAgeiQveiqnuOBjOWlveOBjeOBp+OBmeOAguatjOOBo+OBn+OCiui4iuOBo+OBn+OCiuOCguOBl+OBvuOBmeOAglxu44Ob44Ot44Op44Kk44OW44OX44Ot44OA44Kv44K344On44OzIHwg44Oe44OeOiBAa2FvbWluZzc3NSB8IOODkeODkTogQGtlZmZpeSB8IOODleOCoeODs+OCouODvOODiCAj44KJ44Gn44KT5Ly857W1IHwiLCAiYXZhdGFyX3VybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vcHJvZmlsZV9pbWFnZXMvMjA5ODcyODQzMzgyODQ2MjU5Mi91OGwybkdBaV9iaWdnZXIucG5nIiwgImJhbm5lcl91cmwiOiAiaHR0cHM6Ly9wYnMudHdpbWcuY29tL3Byb2ZpbGVfYmFubmVycy8xNjc3MjE4NjU4MTUyNzU5Mjk2LzE3ODkyMTA4MjYiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4iLCAiZm9sbG93ZXJzIjogNTE0ODQ1LCAidHdlZXRzIjogMTAyOTUsICJ3ZWJzaXRlIjogImh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL0BKdXVmdXV0ZWlSYWRlbiJ9LCAicG9zdHMiOiBbeyJpZCI6ICIyMDk4MjYxNzA0MTYxNTY3MTcyIiwgInRleHQiOiAi8J+QmuOCpOODmeODs+ODiO+8huOCsOODg+OCuuaDheWgseS4gOimp/CfkJpcblxuMjAyNuW5tOWkj+OBi+OCiTIwMjflubQx5pyI44Gr44GL44GR44Gm44Gu44Kk44OZ44Oz44OI77yG44Kw44OD44K65LiA6Kan44Gv44GT44Gh44KJ44Gn44O844KT77yB77yBXG5cbuOBk+OBoeOCieOBjOacgOaWsOeJiOOBp+OBmfCfkYDinKhcblxu56We5Ye66ay85rKh44Gu44KJ44Gn44KT44Gn44GZ44GM44Gp44GG44Ge44KI44KN44GX44GP44GK6aGY44GE44GE44Gf44GX44G+44GZ77yB77yB77yBIGh0dHBzOi8vdC5jby9lbVhqQzJsWjlPIiwgImNyZWF0ZWRfYXQiOiAiRnJpIFNlcCAxMSAwNDowNTo0OCArMDAwMCAyMDI2IiwgImNyZWF0ZWRfaXNvIjogIjIwMjYtMDktMTFUMDQ6MDU6NDgrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI2LzA5LzExIDEzOjA1IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8yMDk4MjYxNzA0MTYxNTY3MTcyIiwgIm1lZGlhIjogW3sidHlwZSI6ICJwaG90byIsICJ1cmwiOiAiaHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0hSNkY1Z0lhWUFFNFFOVC5qcGciLCAiZXhwYW5kZWRfdXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzIwOTgyNjE3MDQxNjE1NjcxNzIvcGhvdG8vMSJ9XSwgImZhdm9yaXRlX2NvdW50IjogMzk5NCwgInJldHdlZXRfY291bnQiOiA2Njh9LCB7ImlkIjogIjE5NzQwMDkwMjY4NTkyMjU0NTEiLCAidGV4dCI6ICLjgJBjb3ZlcuOAkeOBleOCiOODvOOBquOCieOBvuOBn+OBhOOBpOOBi++8geOAkFJlR0xPU1PjgojjgorjgJEgaHR0cHM6Ly90LmNvL3lvMkg5UG94V0IgQFlvdVR1YmXjgojjgoogXG5cblJlR0xPU1PjgojjgorpnZLjgY/jgpPjgbhcblJlR0xPU1Pjgojjgorjgb/jgpPjgarjgbhcblJlR0xPU1Pjgojjgornp4HjgZ/jgaHjgbggaHR0cHM6Ly90LmNvL0F0M1FwcDVjVHkiLCAiY3JlYXRlZF9hdCI6ICJGcmkgT2N0IDAzIDA3OjEwOjAxICswMDAwIDIwMjUiLCAiY3JlYXRlZF9pc28iOiAiMjAyNS0xMC0wM1QwNzoxMDowMSswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjUvMTAvMDMgMTY6MTAiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE5NzQwMDkwMjY4NTkyMjU0NTEiLCAibWVkaWEiOiBbeyJ0eXBlIjogInBob3RvIiwgInVybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvRzJVV2hVbmFJQUFHVzBhLmpwZyIsICJleHBhbmRlZF91cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTk3NDAwOTAyNjg1OTIyNTQ1MS9waG90by8xIn1dLCAiZmF2b3JpdGVfY291bnQiOiAxMzAxNTEsICJyZXR3ZWV0X2NvdW50IjogMjU5MjJ9LCB7ImlkIjogIjE5NzQwMDgyOTQzNzAxNDQ1MTYiLCAidGV4dCI6ICLpnZLjgY/jgpPjgbhcblJlR0xPU1PjgajjgZfjgabkuIDnt5LjgavmtLvli5XjgafjgY3jgabjgIHjgajjgaPjgabjgoLmpb3jgZfjgYvjgaPjgZ/jgojjgIJcblxu5LiA57eS44Gr44GK5Ye644GL44GR44GX44Gf44KK44CB44GK5rOK44KK44GX44Gf44KK44CB44Os44OD44K544Oz44GX44Gf44KK44CB6Z2S44GP44KT44Go6YGO44GU44GX44Gf5LiA5pel5LiA5pel44GM5aSn5LqL44Gq5oCd44GE5Ye644Gn44GZ44CCXG5cblJlR0xPU1Pjga415Lq644Gu5aSn5YiH44Gq5qSF5a2Q44GM44Gy44Go44Gk44G944Gj44GL44KK56m644GE44Gm44GX44G+44Gj44Gm44CB5a+C44GX44GP44Gq44GE44Go6KiA44Gj44Gf44KJ5ZiY44Gr44Gq44KK44G+44GZ44CCIiwgImNyZWF0ZWRfYXQiOiAiRnJpIE9jdCAwMyAwNzowNzowNyArMDAwMCAyMDI1IiwgImNyZWF0ZWRfaXNvIjogIjIwMjUtMTAtMDNUMDc6MDc6MDcrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI1LzEwLzAzIDE2OjA3IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xOTc0MDA4Mjk0MzcwMTQ0NTE2IiwgIm1lZGlhIjogW10sICJmYXZvcml0ZV9jb3VudCI6IDExNTk1NiwgInJldHdlZXRfY291bnQiOiAxMzk4Nn0sIHsiaWQiOiAiMTgyODc2OTQ0MDQ2NjcwMjMzOSIsICJ0ZXh0IjogIiPmuYrjgYLjgY/jgYLljZLmpa3jg6njgqTjg5Zcblxu44GE44Gj44Gm44KJ44Gj44GX44KD44GE77yBXG7jgb7jgZ/jganjgZPjgYvjgafvvIHvvIEiLCAiY3JlYXRlZF9hdCI6ICJXZWQgQXVnIDI4IDEyOjE5OjQ2ICswMDAwIDIwMjQiLCAiY3JlYXRlZF9pc28iOiAiMjAyNC0wOC0yOFQxMjoxOTo0NiswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjQvMDgvMjggMjE6MTkiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE4Mjg3Njk0NDA0NjY3MDIzMzkiLCAibWVkaWEiOiBbXSwgImZhdm9yaXRlX2NvdW50IjogNjEwMzQsICJyZXR3ZWV0X2NvdW50IjogNzU1OH0sIHsiaWQiOiAiMTgyMDgwMzU0ODA4NDU5NjkzNCIsICJ0ZXh0IjogIuOBneOBl+OBpuOAgeOBv+OBquOBleOCk+OBjOaAneOBo+OBpuOCi+OCiOOCiuOCguengeOBn+OBoeOBr+S7luS6uuOBruaEn+aDheOBq+W3puWPs+OBleOCjOOCi+OBl+OAgeeWsuOCjOOBpuOBl+OBvuOBhOOBvuOBmeOAglxu44GX44KT44Gp44GE44Gq44Gj44Gm5oCd44Gj44Gf44KJ44Gd44Gu44Go44GN44Gv5bCR44GX44Gg44GR44Kk44Oz44K/44O844ON44OD44OI44GL44KJ6Zui44KM44Gm44G/44Gm44GP44Gg44GV44GE44Gt44CCIiwgImNyZWF0ZWRfYXQiOiAiVHVlIEF1ZyAwNiAxMjo0NjowOSArMDAwMCAyMDI0IiwgImNyZWF0ZWRfaXNvIjogIjIwMjQtMDgtMDZUMTI6NDY6MDkrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI0LzA4LzA2IDIxOjQ2IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xODIwODAzNTQ4MDg0NTk2OTM0IiwgIm1lZGlhIjogW10sICJmYXZvcml0ZV9jb3VudCI6IDU2NDQzLCAicmV0d2VldF9jb3VudCI6IDgyNjN9LCB7ImlkIjogIjE5NzQwMjQyOTA0NjgyMzc3MDciLCAidGV4dCI6ICLjg5fjg6zjg5/jgqLlhazplovjgYLjgorjgYzjgajjgYbjgZTjgZbjgYTjgb7jgZfjgZ/jgIJcblxu44GT44Gu44Kr44OQ44O844Gu6KO95L2c5pyf6ZaTNeaXpeOBruOBquOBi+OBp+OAgeODrOOCs+ODvOODh+OCo+ODs+OCsOOBq+WNlOWKm+OBl+OBpuOBj+OCjOOBn+Wlj+OAgeiOieOAheiPr+OAgeOBr+OBmOOCgeOAgeOCruODquOCruODquOBvuOBp+iqv+aVtOOBl+OBpuOBj+OCjOOBn01JWOW4q+WFq+S5neWvuuOBl+OCk+OBmOOBleOCk+OAgeOCpOODqeOCueODiOOCkuS7leS4iuOBkuOBpuOBj+OCjOOBn+OCpOODqeOCueODiOODrOODvOOCv+ODvOODi+ODvOODj+OCquS4ieW5s+OBleOCk+OAgeOBneOBl+OBpuiBtOOBhOOBpuOBj+OBoOOBleOBo+OBn+OBv+OBquOBleOBvuOBq+acgOWkp+OBruaEn+isneOCkui+vOOCgeOBpuOAgiIsICJjcmVhdGVkX2F0IjogIkZyaSBPY3QgMDMgMDg6MTA6NDEgKzAwMDAgMjAyNSIsICJjcmVhdGVkX2lzbyI6ICIyMDI1LTEwLTAzVDA4OjEwOjQxKzAwOjAwIiwgImNyZWF0ZWRfbGFiZWwiOiAiMjAyNS8xMC8wMyAxNzoxMCIsICJ1cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTk3NDAyNDI5MDQ2ODIzNzcwNyIsICJtZWRpYSI6IFtdLCAiZmF2b3JpdGVfY291bnQiOiA1NjkzMiwgInJldHdlZXRfY291bnQiOiA4Mzg1fSwgeyJpZCI6ICIxOTMzNTMxMDAwMjY2NzY0Mzg0IiwgInRleHQiOiAi5pS544KB44G+44GX44Gm44CB5pys5pelNuaciDEz5pel5Lqs6YO95aSn5a2m44Oh44OH44Kj44Ki5paH5YyW5a2m44Gr44Gm54m55Yil6Kyb576p44KS44GV44Gb44Gm44GE44Gf44Gg44GN44G+44GX44Gf44O877yBXG5cbuOBqOOBpuOCguWFieaghOOBquOBk+OBqOOBp+OAgee3iuW8teOBl+OBpOOBpOOCgualveOBl+OBj+OBiuipseOBp+OBjeOBn+OBruOBi+OBquOBqOaAneOBhOOBvuOBmeOAglZ0dWJlcuOBruOCouOCpOODh+ODs+ODhuOCo+ODhuOCo+OChOS7leS6i+OBruOBk+OBqOOBquOBqeOAgeiHquWIhuOBruS9k+mok+OCkuOCguOBqOOBq+WWi+OCieOBm+OBpuOBhOOBn+OBoOOBjeOBvuOBl+OBn++8gVxuXG7osrTph43jgarmqZ/kvJrjgpLjgYLjgorjgYzjgajjgYbjgZTjgZbjgYTjgb7jgZfjgZ/vvIHvvIEgaHR0cHM6Ly90LmNvL3p6VWVydzZScGoiLCAiY3JlYXRlZF9hdCI6ICJGcmkgSnVuIDEzIDE0OjI0OjQ4ICswMDAwIDIwMjUiLCAiY3JlYXRlZF9pc28iOiAiMjAyNS0wNi0xM1QxNDoyNDo0OCswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjUvMDYvMTMgMjM6MjQiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE5MzM1MzEwMDAyNjY3NjQzODQiLCAibWVkaWEiOiBbeyJ0eXBlIjogInBob3RvIiwgInVybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvR3RWRzZ3dGJNQUV2WDBBLmpwZyIsICJleHBhbmRlZF91cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTkzMzUzMTAwMDI2Njc2NDM4NC9waG90by8xIn1dLCAiZmF2b3JpdGVfY291bnQiOiA1MjU1MCwgInJldHdlZXRfY291bnQiOiA1MDI1fSwgeyJpZCI6ICIxODkwMDA4MTI1Nzk0OTAyNTI0IiwgInRleHQiOiAi44OP44KhIOODiOOCpOODrOOCgueEoeOCp1xu5pmC6ZaT44KC54Sh44KnXG7jgYrphZLjgoLjgZ3jgozjgbvjgankvZnjgaPjgabnhKHjgqdcbuS8keOBv+OCgueEoeOCpyDkvZnoo5XjgoLnhKHjgqdcbuOBvuOBhOOBn+OBkeavjuaXpeOBkOODvOOCi+OBkOOCiyIsICJjcmVhdGVkX2F0IjogIlRodSBGZWIgMTMgMTI6MDA6MjYgKzAwMDAgMjAyNSIsICJjcmVhdGVkX2lzbyI6ICIyMDI1LTAyLTEzVDEyOjAwOjI2KzAwOjAwIiwgImNyZWF0ZWRfbGFiZWwiOiAiMjAyNS8wMi8xMyAyMTowMCIsICJ1cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTg5MDAwODEyNTc5NDkwMjUyNCIsICJtZWRpYSI6IFtdLCAiZmF2b3JpdGVfY291bnQiOiA0Njg0OCwgInJldHdlZXRfY291bnQiOiA0OTcwfSwgeyJpZCI6ICIxODU0MzYxNzIyNDY0OTQwMzU3IiwgInRleHQiOiAiaHR0cHM6Ly90LmNvL3JZb0s2OVZIUzciLCAiY3JlYXRlZF9hdCI6ICJUaHUgTm92IDA3IDAzOjE0OjIxICswMDAwIDIwMjQiLCAiY3JlYXRlZF9pc28iOiAiMjAyNC0xMS0wN1QwMzoxNDoyMSswMDowMCIsICJjcmVhdGVkX2xhYmVsIjogIjIwMjQvMTEvMDcgMTI6MTQiLCAidXJsIjogImh0dHBzOi8veC5jb20vanV1ZnV1dGVpcmFkZW4vc3RhdHVzLzE4NTQzNjE3MjI0NjQ5NDAzNTciLCAibWVkaWEiOiBbeyJ0eXBlIjogInBob3RvIiwgInVybCI6ICJodHRwczovL3Bicy50d2ltZy5jb20vbWVkaWEvR2J3RUtJUWFJQUFwRGVzLmpwZyIsICJleHBhbmRlZF91cmwiOiAiaHR0cHM6Ly94LmNvbS9qdXVmdXV0ZWlyYWRlbi9zdGF0dXMvMTg1NDM2MTcyMjQ2NDk0MDM1Ny9waG90by8xIn1dLCAiZmF2b3JpdGVfY291bnQiOiA0NTIzOCwgInJldHdlZXRfY291bnQiOiA1NDc3fSwgeyJpZCI6ICIxODIwODAxMzU4MjcyMDI4NzM1IiwgInRleHQiOiAi44Gp44KT44Gq5oSf5oOF44KC44GC44Gq44Gf44Gu44KC44Gu44Gq44Gu44Gn44CB5aSn5YiH44Gr44GX44Gm44GC44GS44Gm44GP44Gg44GV44GE44CCIiwgImNyZWF0ZWRfYXQiOiAiVHVlIEF1ZyAwNiAxMjozNzoyNyArMDAwMCAyMDI0IiwgImNyZWF0ZWRfaXNvIjogIjIwMjQtMDgtMDZUMTI6Mzc6MjcrMDA6MDAiLCAiY3JlYXRlZF9sYWJlbCI6ICIyMDI0LzA4LzA2IDIxOjM3IiwgInVybCI6ICJodHRwczovL3guY29tL2p1dWZ1dXRlaXJhZGVuL3N0YXR1cy8xODIwODAxMzU4MjcyMDI4NzM1IiwgIm1lZGlhIjogW10sICJmYXZvcml0ZV9jb3VudCI6IDQ0MTQ2LCAicmV0d2VldF9jb3VudCI6IDY4NTN9XX0=';
 ​
-    const profileEl = document.getElementById('profile');
-    const feedEl = document.getElementById('feed');
-    const updatedLabel = document.getElementById('updated-label');
-    const openX = document.getElementById('open-x');
-    const toast = document.getElementById('toast');
-    const refreshBtn = document.getElementById('refresh-profile');
+  var SEED = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(SEED_B64), function (c) {
+    return c.charCodeAt(0);
+  })));
 ​
-    let state = structuredClone(SEED);
+  var profileEl = document.getElementById('profile');
+  var bannerEl = document.getElementById('profile-banner');
+  var feedEl = document.getElementById('feed');
+  var updatedLabel = document.getElementById('updated-label');
+  var openX = document.getElementById('open-x');
+  var toast = document.getElementById('toast');
+  var refreshBtn = document.getElementById('refresh-profile');
+  var state = JSON.parse(JSON.stringify(SEED));
 ​
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+  }
+​
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+​
+  function linkify(text) {
+    var s = escapeHtml(text || '');
+    s = s.replace(/(https?:\/\/[^\s<]+)/g, function (m) {
+      var clean = m.replace(/[)\].,!?]+$/g, '');
+      var trail = m.slice(clean.length);
+      return '<a href="' + clean + '" target="_blank" rel="noopener noreferrer">' + clean + '</a>' + trail;
+    });
+    s = s.replace(/@([A-Za-z0-9_]+)/g, '<a href="https://x.com/$1" target="_blank" rel="noopener noreferrer">@$1</a>');
+    s = s.replace(/#([0-9A-Za-z_\u00C0-\u024F\u3040-\u30FF\u3400-\u9FFF]+)/g,
+      '<a href="https://x.com/hashtag/$1" target="_blank" rel="noopener noreferrer">#$1</a>');
+    return s;
+  }
+​
+  function formatCount(n) {
+    if (n == null || n === '') return null;
+    var num = Number(n);
+    if (isNaN(num)) return null;
+    return new Intl.NumberFormat('ja-JP').format(num);
+  }
+​
+  function formatFetchedAt(iso) {
+    if (!iso) return '更新日時不明';
+    try {
+      return 'データ取得: ' + new Date(iso).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    } catch (e) {
+      return 'データ取得: ' + iso;
     }
+  }
 ​
-    function escapeHtml(s) {
-      return String(s)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
+  function renderProfile(p) {
+    p = p || {};
+    var followers = formatCount(p.followers);
+    var tweets = formatCount(p.tweets);
+    if (p.banner_url) {
+      bannerEl.style.backgroundImage = 'url("' + String(p.banner_url).replace(/"/g, '\\"') + '")';
+    } else {
+      bannerEl.style.backgroundImage = '';
     }
+    profileEl.innerHTML =
+      '<img class="avatar" src="' + escapeHtml(p.avatar_url || '') + '" alt="" width="72" height="72" loading="lazy" referrerpolicy="no-referrer" />' +
+      '<div class="profile-main">' +
+        '<p class="profile-name">' + escapeHtml(p.name || '') + '</p>' +
+        '<p class="profile-handle">@' + escapeHtml(p.screen_name || '') + '</p>' +
+      '</div>' +
+      (p.description ? '<p class="profile-bio">' + escapeHtml(p.description) + '</p>' : '') +
+      '<div class="profile-meta">' +
+        (followers != null ? '<span class="chip">フォロワー ' + followers + '</span>' : '') +
+        (tweets != null ? '<span class="chip">投稿 ' + tweets + '</span>' : '') +
+        (p.website ? '<a class="chip" href="' + escapeHtml(p.website) + '" target="_blank" rel="noopener noreferrer">Web</a>' : '') +
+      '</div>';
+    openX.href = p.url || ('https://x.com/' + (p.screen_name || 'juufuuteiraden'));
+  }
 ​
-    function linkify(text) {
-      let s = escapeHtml(text || '');
-      // URLs
-      s = s.replace(/(https?:\/\/[^\s<]+)/g, (m) => {
-        const clean = m.replace(/[)\].,!?]+$/g, '');
-        const trail = m.slice(clean.length);
-        return `<a href="${clean}" target="_blank" rel="noopener noreferrer">${clean}</a>${trail}`;
-      });
-      // mentions
-      s = s.replace(/@([A-Za-z0-9_]+)/g, '<a href="https://x.com/$1" target="_blank" rel="noopener noreferrer">@$1</a>');
-      // hashtags
-      s = s.replace(/#([\w\u00C0-\u024F\u3040-\u30FF\u3400-\u9FFF\uFF10-\uFF19\uFF21-\uFF3A\uFF41-\uFF5A]+)/g,
-        '<a href="https://x.com/hashtag/$1" target="_blank" rel="noopener noreferrer">#$1</a>');
-      return s;
+  function renderPosts(posts) {
+    var profile = state.profile || {};
+    if (!posts || !posts.length) {
+      feedEl.innerHTML = '<div class="empty">表示できる投稿がありません</div>';
+      return;
     }
-​
-    function formatCount(n) {
-      if (n == null || n === '') return null;
-      const num = Number(n);
-      if (Number.isNaN(num)) return null;
-      return new Intl.NumberFormat('ja-JP').format(num);
-    }
-​
-    function formatFetchedAt(iso) {
-      if (!iso) return '更新日時不明';
-      try {
-        const d = new Date(iso);
-        return 'データ取得: ' + d.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
-      } catch {
-        return 'データ取得: ' + iso;
-      }
-    }
-​
-    function renderProfile(p) {
-      const followers = formatCount(p.followers);
-      const tweets = formatCount(p.tweets);
-      profileEl.innerHTML = `
-        <img class="avatar" src="${escapeHtml(p.avatar_url || '')}" alt="" width="56" height="56" loading="lazy" referrerpolicy="no-referrer" />
-        <div>
-          <p class="profile-name">${escapeHtml(p.name || '')}</p>
-          <p class="profile-handle">@${escapeHtml(p.screen_name || '')}</p>
-          ${p.description ? `<p class="profile-bio">${escapeHtml(p.description)}</p>` : ''}
-          <div class="profile-meta">
-            ${followers != null ? `<span>フォロワー ${followers}</span>` : ''}
-            ${tweets != null ? `<span>投稿 ${tweets}</span>` : ''}
-            ${p.website ? `<a class="btn" style="min-height:24px;padding:0 8px" href="${escapeHtml(p.website)}" target="_blank" rel="noopener noreferrer">Web</a>` : ''}
-          </div>
-        </div>
-      `;
-      openX.href = p.url || `https://x.com/${p.screen_name || 'juufuuteiraden'}`;
-    }
-​
-    function renderPosts(posts) {
-      if (!posts || !posts.length) {
-        feedEl.innerHTML = '<div class="empty">表示できる投稿がありません</div>';
-        return;
-      }
-      feedEl.innerHTML = posts.map((post) => {
-        const media = (post.media || [])
-          .filter((m) => m && m.url)
-          .slice(0, 4)
-          .map((m) => `<img src="${escapeHtml(m.url)}" alt="" loading="lazy" referrerpolicy="no-referrer" />`)
-          .join('');
-        const fav = formatCount(post.favorite_count);
-        const rt = formatCount(post.retweet_count);
-        return `
-          <a class="post" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer">
-            <div class="post-top">
-              <span class="post-time">${escapeHtml(post.created_label || post.created_at || '')}</span>
-            </div>
-            <p class="post-text">${linkify(post.text || '')}</p>
-            ${media ? `<div class="media">${media}</div>` : ''}
-            <div class="post-stats">
-              ${rt != null ? `<span>RT ${rt}</span>` : ''}
-              ${fav != null ? `<span>いいね ${fav}</span>` : ''}
-            </div>
-          </a>
-        `;
+    feedEl.innerHTML = posts.map(function (post) {
+      var mediaItems = (post.media || []).filter(function (m) { return m && m.url; }).slice(0, 4);
+      var mediaClass = mediaItems.length > 1 ? 'media multi' : 'media single';
+      var media = mediaItems.map(function (m) {
+        return '<img src="' + escapeHtml(m.url) + '" alt="" loading="lazy" referrerpolicy="no-referrer" />';
       }).join('');
-    }
+      var fav = formatCount(post.favorite_count);
+      var rt = formatCount(post.retweet_count);
+      return (
+        '<article class="post-card" data-url="' + escapeHtml(post.url) + '" tabindex="0" role="link" aria-label="投稿をXで開く">' +
+          '<div class="post-head">' +
+            '<img class="post-avatar" src="' + escapeHtml(profile.avatar_url || '') + '" alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer" />' +
+            '<div class="post-who">' +
+              '<p class="post-who-name">' + escapeHtml(profile.name || '') + '</p>' +
+              '<p class="post-who-sub">@' + escapeHtml(profile.screen_name || '') + '</p>' +
+            '</div>' +
+            '<span class="post-time">' + escapeHtml(post.created_label || post.created_at || '') + '</span>' +
+          '</div>' +
+          '<p class="post-text">' + linkify(post.text || '') + '</p>' +
+          (media ? '<div class="' + mediaClass + '">' + media + '</div>' : '') +
+          '<div class="post-foot">' +
+            '<div class="post-stats">' +
+              (rt != null ? '<span>RT ' + rt + '</span>' : '') +
+              (fav != null ? '<span>いいね ' + fav + '</span>' : '') +
+            '</div>' +
+            '<a class="post-cta" href="' + escapeHtml(post.url) + '" target="_blank" rel="noopener noreferrer">投稿を見る →</a>' +
+          '</div>' +
+        '</article>'
+      );
+    }).join('');
+  }
 ​
-    function renderAll() {
-      renderProfile(state.profile || {});
+​
+  function bindPostCards() {
+    var cards = feedEl.querySelectorAll('.post-card[data-url]');
+    cards.forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('a')) return; // let inner links work
+        var url = card.getAttribute('data-url');
+        if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('a')) return;
+          e.preventDefault();
+          var url = card.getAttribute('data-url');
+          if (url) window.open(url, '_blank', 'noopener,noreferrer');
+        }
+      });
+    });
+  }
+​
+  function renderAll() {
+    renderProfile(state.profile || {});
+    renderPosts(state.posts || []);
+    bindPostCards();
+    updatedLabel.textContent = formatFetchedAt(state.fetched_at);
+  }
+​
+  function refreshProfile(opts) {
+    opts = opts || {};
+    var silent = !!opts.silent;
+    var username = (state.username || 'juufuuteiraden').replace(/^@/, '');
+    refreshBtn.disabled = true;
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, 8000);
+    fetch('https://api.fxtwitter.com/' + encodeURIComponent(username), {
+      headers: { 'Accept': 'application/json' },
+      signal: ctrl.signal
+    }).then(function (res) {
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('http ' + res.status);
+      return res.json();
+    }).then(function (json) {
+      if (!json || !json.user) throw new Error('no user');
+      var u = json.user;
+      state.profile = {
+        name: u.name || state.profile.name,
+        screen_name: u.screen_name || username,
+        description: u.description || '',
+        avatar_url: (u.avatar_url || '').replace('_normal', '_bigger'),
+        banner_url: u.banner_url || '',
+        url: u.url || ('https://x.com/' + username),
+        followers: u.followers,
+        tweets: u.tweets,
+        website: u.website && u.website.url ? u.website.url : (u.website || null)
+      };
+      renderProfile(state.profile);
       renderPosts(state.posts || []);
-      updatedLabel.textContent = formatFetchedAt(state.fetched_at);
-    }
+      bindPostCards();
+      if (!silent) showToast('プロフィールを更新しました');
+    }).catch(function () {
+      if (!silent) showToast('プロフィール更新に失敗しました');
+    }).finally(function () {
+      refreshBtn.disabled = false;
+    });
+  }
 ​
-    async function refreshProfile(opts) {
-      opts = opts || {};
-      const silent = !!opts.silent;
-      const username = (state.username || 'juufuuteiraden').replace(/^@/, '');
-      refreshBtn.disabled = true;
-      try {
-        const res = await fetch('https://api.fxtwitter.com/' + encodeURIComponent(username), {
-          headers: { 'Accept': 'application/json' }
-        });
-        if (!res.ok) throw new Error('http ' + res.status);
-        const json = await res.json();
-        if (!json || !json.user) throw new Error('no user');
-        const u = json.user;
-        state.profile = {
-          name: u.name || state.profile.name,
-          screen_name: u.screen_name || username,
-          description: u.description || '',
-          avatar_url: (u.avatar_url || '').replace('_normal', '_bigger'),
-          banner_url: u.banner_url || '',
-          url: u.url || ('https://x.com/' + username),
-          followers: u.followers,
-          tweets: u.tweets,
-          website: u.website && u.website.url ? u.website.url : (u.website || null)
-        };
-        renderProfile(state.profile);
-        if (!silent) showToast('プロフィールを更新しました');
-      } catch (e) {
-        if (!silent) showToast('プロフィール更新に失敗しました');
-      } finally {
-        refreshBtn.disabled = false;
-      }
-    }
+  refreshBtn.addEventListener('click', function () { refreshProfile({ silent: false }); });
 ​
-    refreshBtn.addEventListener('click', function () { refreshProfile({ silent: false }); });
+  try {
     renderAll();
-    // 起動時は静かにプロフィールだけ最新化（失敗してもSEEDのまま）
-    refreshProfile({ silent: true });
+  } catch (e) {
+    updatedLabel.textContent = '表示エラー';
+    feedEl.innerHTML = '<div class="empty">表示に失敗しました。ページを再読み込みしてください。</div>';
+    console.error(e);
+  }
+​
+  refreshProfile({ silent: true });
+})();
   </script>
 </body>
 </html>
