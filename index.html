@@ -139,7 +139,6 @@
         </div>
       </div>
       <div class="actions">
-        <button type="button" class="btn" id="refresh-posts">投稿を更新</button>
         <a class="btn btn-primary" id="open-x" href="https://x.com/juufuuteiraden" target="_blank" rel="noopener noreferrer">Xで開く</a>
       </div>
     </div>
@@ -155,8 +154,8 @@
     <section class="feed" id="feed" aria-label="投稿カード一覧" aria-live="polite"></section>
 
     <p class="note">
-      簡易カード表示 · 「投稿を更新」で最新を再取得できます<br />
-      取得できないときは保存済みデータを表示します
+      簡易カード表示 · 起動時に最新投稿を自動取得します<br />
+      取得できないときは保存済み／同梱データを表示します
     </p>
   </main>
   <div class="toast" id="toast" role="status"></div>
@@ -560,8 +559,9 @@
     function refreshPosts(opts) {
       opts = opts || {};
       var silent = !!opts.silent;
-      refreshPostsBtn.disabled = true;
+      if (refreshPostsBtn) refreshPostsBtn.disabled = true;
       if (!silent) showToast("投稿を取得中…");
+      else updatedLabel.textContent = "最新投稿を取得中…";
       fetchLatestPosts()
         .then(function (posts) { return enrichPosts(posts); })
         .then(function (posts) {
@@ -575,17 +575,20 @@
         .catch(function (e) {
           console.warn(e);
           if (!silent) showToast("投稿の更新に失敗しました。しばらくして再試行してください");
+          else updatedLabel.textContent = formatFetchedAt(state.fetched_at);
         })
         .finally(function () {
-          refreshPostsBtn.disabled = false;
+          if (refreshPostsBtn) refreshPostsBtn.disabled = false;
         });
     }
 
     if (refreshProfileBtn) refreshProfileBtn.addEventListener("click", function () { refreshProfile({ silent: false }); });
-    refreshPostsBtn.addEventListener("click", function () { refreshPosts({ silent: false }); });
+    if (refreshPostsBtn) refreshPostsBtn.addEventListener("click", function () { refreshPosts({ silent: false }); });
 
     renderAll();
     refreshProfile({ silent: true });
+    // 起動時に1回だけ投稿を自動更新（定期実行なし）
+    refreshPosts({ silent: true });
   }
 
   function boot(seed) {
